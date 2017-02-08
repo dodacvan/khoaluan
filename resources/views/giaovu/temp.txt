@@ -1,0 +1,145 @@
+<div class="divLeft" style="float:left; overflow: auto; margin-left: 0px;">
+    <ul>
+        <li>giao vien</li>
+        <li>giao vu</li>
+    </ul>
+</div>
+<div class="loginRight">
+    <div id="divLogin">
+        <div class="content">
+             <form action="" method="POST">
+                <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+                <table border="0" cellspacing="2" cellpadding="2" style="border-collapse:collapse; width:100%;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                                <table border="0" cellspacing="10" cellpadding="10" style="border-collapse:collapse; width:100%;">
+                                    <tr>                                    
+                                        <td >
+                                      <strong>Tên giáo viên</strong>  
+                                        <br />
+                                        <input name="txtname" id="txtname" class="inputbox" type="text" />
+                                        </td>
+                                    </tr>
+                                    <tr>   
+                                        <td>
+                                        <strong>Ngày sinh</strong>
+                                        <br />
+                                        <input name="txtbirth" id="txtbirth" value="" class="inputbox" type="date">
+                                        </td>
+                                    </tr>
+                                    <tr>   
+                                        <td>
+                                        <strong>Quê quán</strong>
+                                        <br />
+                                        <input name="txtprovince" id="txtprovince" value="" class="inputbox" type="text">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Giới tính</strong>
+                                            <br/>
+                                            <select type="text" name="textsex" id="txtsex"  class="inputbox">
+                                                <option value="1">Nam</option>
+                                                <option value="2">Nữ</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>   
+                                        <td>
+                                        <strong>Địa chỉ</strong>
+                                        <br />
+                                        <input name="txtaddress" id="txtaddress" value="" class="inputbox" type="text">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Chức danh</strong>
+                                            <br/>
+                                            <select type="text" name="txttitle" id="txttitle"  class="inputbox">
+                                                <option value="1">Trường phòng</option>
+                                                <option value="2">Phó phòng</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Học hàm</strong>
+                                            <br/>
+                                            <select type="text" name="txtacademic" id="txtacademic"  class="inputbox">
+                                                <option value="1">None</option>
+                                                <option value="2">Phó giáo sư</option>
+                                                <option value="3">Giáo sư</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Học vị</strong>
+                                            <br/>
+                                            <select type="text" name="txtdegree" id="txtdegree"  class="inputbox">
+                                                <option value="1">None</option>
+                                                <option value="2">Thạc sĩ</option>
+                                                <option value="3">Phó tiến sĩ</option>
+                                                <option value="3">Tiến sĩ</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Khoa</strong>
+                                            <br/>
+                                            <select type="text" name="txtdepart" id="txtdepart"  class="inputbox">
+                                                <option value="1">CNTT</option>
+                                                <option value="2">Vật lý kĩ thuật</option>
+                                                <option value="3">Cơ kĩ thuật</option>
+                                                <option value="3">Truyền thông và mạng máy tính</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Bộ môn</strong>
+                                            <br/>
+                                            <select type="text" name="txtsubject" id="txtsubject"  class="inputbox">
+                                                <option value="1">Công nghệ phần mềm</option>
+                                                <option value="2">Mạng máy tính</option>
+                                                <option value="3">Khoa học máy tính</option>
+                                                <option value="3">CNTT</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                     <tr>   
+                                        <td>
+                                        <strong>Số điện thoại</strong>
+                                        <br />
+                                        <input name="txtphone" id="txtphone" value="" class="inputbox" type="text">
+                                        </td>
+                                    </tr>
+                                     <tr>   
+                                        <td>
+                                        <strong>Email</strong>
+                                        <br />
+                                        <input name="txtemail" id="txtemail" value="" class="inputbox" type="email">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">
+                                            
+                                        </td>
+                                    </tr>
+
+                                </table>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td align="right">
+                            <button type="submit" class="button" style="height:35px;min-width:100px;">Thêm giáo viên</button>
+                            <button type="reset" class="button" style="height:35px;min-width:100px;">Reset</button> 
+                        </td>
+                    </tr>
+
+                </table>
+            <form>
+        </div>       
+     </div>
+ </div>
