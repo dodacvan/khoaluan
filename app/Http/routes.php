@@ -55,7 +55,11 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 	Route::group(['prefix'=>'giaovien'],function(){
 		Route::get('info/{id}',['as'=>'giaovien.info','uses'=>'GiaovienController@getinfo']);
 		Route::post('addhnc',['as'=>'giaovien.addhncpost','uses'=>'GiaovienController@postaddhnc']);
+		Route::post('edithnc',['as'=>'giaovien.edithnc','uses'=>'GiaovienController@edithnc']);
+		Route::post('deletehnc',['as'=>'giaovien.deletehnc','uses'=>'GiaovienController@deletehnc']);
 		Route::post('adddetai',['as'=>'giaovien.adddetaipost','uses'=>'GiaovienController@postadddetai']);
+		Route::post('editdetai',['as'=>'giaovien.editdetai','uses'=>'GiaovienController@editdetai']);
+		Route::post('deletedetai',['as'=>'giaovien.deletedetai','uses'=>'GiaovienController@deletedetai']);
 		Route::get('listyeucau',['as'=>'giaovien.listyeucau','uses'=>'GiaovienController@getlistyeucau']);
 		Route::post('listyeucau',['as'=>'giaovien.listyeucaupost','uses'=>'GiaovienController@postlistyeucau']);
 		Route::get('infosinhvien/{id}',['as'=>'giaovien.infosinhvien','uses'=>'GiaovienController@getinfosinhvien']);

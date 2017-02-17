@@ -31,14 +31,49 @@ class SinhvienController extends Controller {
 		$data = Giaovien::select('id','tengiaovien')->where('id',$id)->get()->first();
 		return view('sinhvien.adddetai',compact('data'));
 	}
+
+	public function checkdangki($value,&$message,&$status){
+		$giaovien = Giaovien::where('id',$value->giaovien_id)->get()->first();
+		switch ($giaovien['hocvi']) {
+            case 0:
+                $number = 0;
+                break;
+            case 1:
+                $number = 0;
+                break;
+            case 2:
+                $number = 5;
+                break;
+            default:
+                $number = 7;
+                break;
+        }
+        $check = true;
+        if($number == $giaovien['sosinhvien']){
+        	$check = false;
+        	$message = "Giáo viên đã nhận đủ sinh viên";
+        	$status = "danger";
+        }
+        if (Yeucau::where('sinhvien_id', '=', $value->sinhvien_id)->count() > 0) {
+		   	$check = false;
+        	$message = "Bạn đã đăng kí không thể đăng kí thêm";
+        	$status = "danger";
+		}
+		return $check;
+	}
 	
 	public function postadddetai(DetaiResquest $request){
-		$yeucau = new Yeucau();
-		$yeucau->giaovien_id = $request->giaovien_id;
-		$yeucau->sinhvien_id = $request->sinhvien_id;
-		$yeucau->tendetai = $request->detai;
-		$yeucau->status = 0;
-		$yeucau->save();
+			$message = "Yêu cầu được gửi tới giáo viên chờ phê duyệt";
+        	$status = "success";
+        	if($this->checkdangki($request,$message,$status)){
+		   		$yeucau = new Yeucau();
+				$yeucau->giaovien_id = $request->giaovien_id;
+				$yeucau->sinhvien_id = $request->sinhvien_id;
+				$yeucau->tendetai = $request->detai;
+				$yeucau->status = 0;
+				$yeucau->save();
+			}
+		return redirect()->route('sinhvien.listgiaovien')->with(['flash_message'=>$message,'status'=>$status]);
 	}
 
 	public function getinfogiaovien($id){

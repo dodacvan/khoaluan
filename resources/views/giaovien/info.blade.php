@@ -36,7 +36,7 @@
                 </tr>
                 <tr>
                     <th>Ngày sinh</th>
-                    <td>{!! $data['ngaysinh'] !!}</td>
+                    <td>{!! date('d-m-Y', strtotime($data['ngaysinh'])) !!}</td>
                 </tr>
             </table>
 	    </div>
@@ -62,11 +62,99 @@
                 </tr>
                  <tr>
                     <th>Bộ môn</th>
-                    <td>{!! $data['bomon'] !!}</td>
+                    <?php
+                      switch ($data['bomon']) {
+                        case 1:
+                           echo  '<td>Công nghệ phần mềm</td>';
+                            break;
+                        case 2:
+                            echo "<td>Hệ thống thông tin</td>";
+                            break;
+                        case 3:
+                            echo "<td>Khoa học máy tính</td>";
+                            break;
+                        case 4:
+                           echo  '<td>Mạng và truyền thông máy tính</td>';
+                            break;
+                        case 5:
+                            echo "<td>Các PP toán trong CN</td>";
+                            break;
+                        case 6:
+                            echo "<td>PTN Công nghệ tri thức</td>";
+                            break;
+                        case 7:
+                           echo  '<td>PTN hệ thống nhúng</td>';
+                            break;
+                        case 8:
+                            echo "<td>PTN Tương tác người máy</td>";
+                            break;
+                        case 9:
+                            echo "<td>Công nghệ nano sinh học</td>";
+                            break;
+                        case 10:
+                           echo  '<td>Vật liệu và linh kiện bán dẫn nano</td>';
+                            break;
+                        case 11:
+                            echo "<td>Vật liệu và linh kiện từ tính nano</td>";
+                            break;
+                        case 12:
+                            echo "<td>Quang tử</td>";
+                            break;
+                        case 13:
+                           echo  '<td>Điện tử và kĩ thuật máy tính</td>';
+                            break;
+                        case 14:
+                            echo "<td>Hệ thống viễn thông</td>";
+                            break;
+                        case 15:
+                            echo "<td>Thông tin vô tuyến</td>";
+                            break;
+                        case 16:
+                           echo  '<td>Vi cơ điện tử và vi hệ thống</td>';
+                            break;
+                        case 17:
+                            echo "<td>PTN Tín hiệu và hệ thống</td>";
+                            break;
+                        case 18:
+                            echo "<td>PTH Điện tử viễn thông</td>";
+                            break;
+                        case 19:
+                           echo  '<td>Cơ điện tử</td>';
+                            break;
+                        case 20:
+                            echo "<td>Công nghệ hàng không vũ trụ</td>";
+                            break;
+                        case 21:
+                            echo "<td>Thủy khí công nghiệp và môi trường</td>";
+                            break;
+                        default:
+                            echo "<td>Công nghệ biển và môi trường</td>";
+                      }
+                    ?>
                 </tr>
                 <tr>
                     <th>Chức danh</th>
-                    <td>{!! $data['chucdanh'] !!}</td>
+                    <?php
+                      switch ($data['chucdanh']) {
+                          case 0:
+                             echo  '<td></td>';
+                              break;
+                          case 1:
+                              echo "<td>GV</td>";
+                              break;
+                          case 2:
+                              echo "<td>GVC</td>";
+                              break;
+                          case 3:
+                              echo "<td>NVC</td>";
+                              break;
+                          case 4:
+                              echo "<td>GVTH</td>";
+                              break;
+                          default:
+                              echo "<td>GVCC</td>";
+                      }
+                    ?>
                 </tr>
                 <tr>
                     <th>Học hàm</th>
@@ -115,35 +203,48 @@
                     <th>Hướng nghiên cứu</th>
                     <td><button type="button" class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#addnghiencuu">Thêm hướng nghiên cứu</button></td>
                      <div id="successMessage" style="display:none;" class="alert-success">Thêm hướng nghiên cứu thành công</div>
+                     <div id="editmessage" style="display:none;" class="alert-success">Sửa hướng nghiên cứu thành công</div>
+                    <div id="deletemessage" style="display:none;" class="alert-success">Xóa hướng nghiên cứu thành công</div>
+                    <div id="errorMessage1" style="display:none;" class="alert-danger">Lỗi xóa</div>
                 </tr>
                  @foreach($hnc as $item)
 
                <tr>
                     <th style="color: #4CAF50;">{!! $item['ten'] !!}</th>
-                    <td style="float: right"><a href="#" class="btn btn-info">
+                    <td style="float: right"><button class="btn btn-info" data-toggle="modal" data-target="#edithnc" onclick="nameofhnc('<?= $item['ten'] ?>','{!! $item['id'] !!}')">
                           <span class="glyphicon glyphicon-edit"></span>
-                        </a>
-                         <a href="#" class="btn btn-danger">
+                        </button>
+                         <button onclick="return xacnhanxoa('bạn có muốn xóa','{!! $item['id'] !!}')" class="btn btn-danger">
                           <span class="glyphicon glyphicon-trash"></span>
-                        </a>
+                        </button>
                     </td>
                 </tr>
                  @endforeach
                 <tr>
                     <th>Đề tài đề xuất</th>
-                    <td> <button type="button" class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#adddetai">Thêm đề tài</button></td>
-                    <div id="detaisuccess" style="display:none;" class="alert-success">Thêm de tai thành công</div>
+                    <td> <button type="button" class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#adddetai">Thêm đề tài</button>
+                      
+                    </td>
+                    
+                </tr>
+                <tr>
+                  <th>
+                    <div id="successdetai" style="display:none;" class="alert-success">Thêm đề tài thành công</div>
+                    <div id="editdetai" style="display:none;" class="alert-success">Sửa đề tài thành công</div>
+                    <div id="deletedetai" style="display:none;" class="alert-success">Xóa đề tài thành công</div>
+                    <div id="errordetai" style="display:none;" class="alert-danger">Lỗi xóa</div>
+                  </th>
                 </tr>
                   @foreach($detai as $item)
                    
                <tr>
                     <th style="color: #4CAF50;">{!! $item['ten'] !!}</th>
-                    <td style="float: right"><a href="#" class="btn btn-info">
+                    <td style="float: right"><button class="btn btn-info" data-toggle="modal" data-target="#editdetaimodal" onclick="nameofdetai('<?= $item['ten'] ?>','{!! $item['id'] !!}')">
                           <span class="glyphicon glyphicon-edit"></span>
-                        </a>
-                         <a href="#" class="btn btn-danger">
+                        </button>
+                         <button onclick="return xacnhanxoadetai('bạn có muốn xóa','{!! $item['id'] !!}')" class="btn btn-danger">
                           <span class="glyphicon glyphicon-trash"></span>
-                        </a>
+                        </button>
                     </td>
                 </tr>
                  @endforeach
@@ -182,6 +283,38 @@
 
       </div>
     </div>
+
+    <div id="edithnc" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Sửa hướng nghiên cứu</h4>
+          </div>
+        <form id="edithncform">
+          <div class="modal-body">
+            <input type="hidden" name="_token" value="{!! csrf_token() !!}" >
+            <input type="hidden" name="idhnc" id="idhnc">
+            <div class="form-group">
+                <label>Tên hướng nghiên cứu</label>
+                <input class="form-control" name="edittxthnc" id="edittxthnc" placeholder="Điền hướng nghiên cứu"/>
+            </div>
+           
+           <div id="errorMessage2" style="display:none;" class="alert-danger">Vui lòng nhập hướng nghiên cứu</div>
+           
+          </div>
+          <div class="modal-footer">
+            <button type="submit" name="submit" class="btn btn-info">Sửa</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+          </div>
+        </form>
+        </div>
+
+      </div>
+    </div>
+
     <div id="adddetai" class="modal fade" role="dialog">
       <div class="modal-dialog">
 
@@ -199,7 +332,7 @@
                 <label>Tên đề tài</label>
                 <input class="form-control" name="txtdetai" id="txtdetai" placeholder="Điền tên đề tài"/>
             </div>
-           <div id="errorMessage" style="display:none;" class="alert-danger">Vui lòng nhập đề tài</div>
+           <div id="errorMessage3" style="display:none;" class="alert-danger">Vui lòng nhập đề tài</div>
            <!-- <div class="form-group">
                 <label>Sinh viên thưc hiện</label>
                 <select class="form-control" name="sinhvien_id">
@@ -211,6 +344,37 @@
           </div>
           <div class="modal-footer">
             <button type="submit" name="submit" class="btn btn-info">Thêm</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+          </div>
+        </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="editdetaimodal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Sửa đề tài</h4>
+          </div>
+        <form id="editdetaiform">
+          <div class="modal-body">
+            <input type="hidden" name="_token" value="{!! csrf_token() !!}" >
+            <input type="hidden" name="iddetai" id="iddetai">
+            <div class="form-group">
+                <label>Tên đề tài</label>
+                <input class="form-control" name="edittxtdetai" id="edittxtdetai"/>
+            </div>
+           
+           <div id="errorMessage4" style="display:none;" class="alert-danger">Vui lòng nhập đề tài</div>
+           
+          </div>
+          <div class="modal-footer">
+            <button type="submit" name="submit" class="btn btn-info">Sửa</button>
             <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
           </div>
         </form>

@@ -9,15 +9,20 @@ $('a#del').click(function(){
            $(this).parents('#gradeX').css({"color": "red", "border": "2px solid red"});
 		
 });
-function xacnhanxoa(msg){
- 	if(window.confirm(msg)){
-		return true;
-	}
-	return false;
+
+
+function nameofhnc($value,$id){
+    $("#edittxthnc").val($value);
+    $("#idhnc").val($id);
 }
+
+function nameofdetai($value,$id){
+    $("#edittxtdetai").val($value);
+    $("#iddetai").val($id);
+}
+
 $('#addhuongnghiencuu').on( 'submit', function(e) {
-	e.preventDefault(); 
-  
+  e.preventDefault();  
   $.ajax({
         type: "POST",
         url: '/dangky/admin/giaovien/addhnc',
@@ -27,17 +32,43 @@ $('#addhuongnghiencuu').on( 'submit', function(e) {
         	if(response.success == 'true'){
         		$("#successMessage").show().delay(1000).slideUp();
         		$('#addhuongnghiencuu')[0].reset();
-        		$('#addnghiencuu').modal('hide');}
+        		$('#addnghiencuu').modal('hide');
+                window.setTimeout(function(){location.reload()},3000)
+            }
         	else
         		$("#errorMessage").show().delay(1000).slideUp();
         },
         error: function (request, status, error) {
-        	alert(request.responseText);
-        	
+        	alert(request.responseText);        	
     	}
-    });
- 	
+    });	
 });
+
+$('#edithncform').on( 'submit', function(e) {
+  e.preventDefault();
+  $.ajax({
+        type: "POST",
+        url: '/dangky/admin/giaovien/edithnc',
+        //data: {"txthnc":txthnc, "_token":_token,"giaovien_id":giaovien_id},
+        data: $("#edithncform").serialize(),
+        success: function( response ) {
+            if(response.success == 'true'){
+                $("#editmessage").show().delay(1000).slideUp();
+                $('#edithncform')[0].reset();
+                $('#edithnc').modal('hide');
+                window.setTimeout(function(){location.reload()},3000)
+            }
+            else
+                $("#errorMessage2").show().delay(1000).slideUp();
+        },
+        error: function (request, status, error) {
+            alert(request.responseText);
+            
+        }
+    });
+    
+});
+
 $('#adddetaiform').on( 'submit', function(e) {
     e.preventDefault(); 
   $.ajax({
@@ -46,12 +77,14 @@ $('#adddetaiform').on( 'submit', function(e) {
         //data: {"txthnc":txthnc, "_token":_token,"giaovien_id":giaovien_id},
         data: $("#adddetaiform").serialize(),
         success: function( response ) {
-        	// if(response.success == 'true'){
-        	// 	$("#successMessage").show().delay(1000).slideUp();
-        	// 	$('#addhuongnghiencuu')[0].reset();
-        	// 	$('#addnghiencuu').modal('hide');}
-        	// else
-        	// 	$("#errorMessage").show().delay(1000).slideUp();
+        	if(response.success == 'true'){
+        		$("#successdetai").show().delay(1000).slideUp();
+        		$('#adddetaiform')[0].reset();
+        		$('#adddetai').modal('hide');
+                window.setTimeout(function(){location.reload()},3000)
+            }
+        	else
+        		$("#errorMessage3").show().delay(1000).slideUp();
         },
         error: function (request, status, error) {
         	alert(request.responseText);
@@ -60,6 +93,32 @@ $('#adddetaiform').on( 'submit', function(e) {
     });
  	
 });
+
+$('#editdetaiform').on( 'submit', function(e) {
+  e.preventDefault();
+  $.ajax({
+        type: "POST",
+        url: '/dangky/admin/giaovien/editdetai',
+        //data: {"txthnc":txthnc, "_token":_token,"giaovien_id":giaovien_id},
+        data: $("#editdetaiform").serialize(),
+        success: function( response ) {
+            if(response.success == 'true'){
+                $("#editdetai").show().delay(1000).slideUp();
+                $('#editdetaiform')[0].reset();
+                $('#editdetaimodal').modal('hide');
+                window.setTimeout(function(){location.reload()},3000)
+            }
+            else
+                $("#errorMessage4").show().delay(1000).slideUp();
+        },
+        error: function (request, status, error) {
+            alert(request.responseText);
+            
+        }
+    });
+    
+});
+
 $('.access').on('click',function(){
     var value = $(this).val();
     var token = $(this).data('token');
@@ -75,7 +134,9 @@ $('.access').on('click',function(){
         data: { 'value': value.value,'action':value.action},
         success: function(response){
             if(response.success == 'true')
-            window.location = window.location.pathname;
+                window.location = window.location.pathname;
+            else
+                 $("#erroraddsv").show().delay(1000).slideUp();
         },
         error: function(request){}
     });

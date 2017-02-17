@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <th>Ngày sinh</th>
-                <td>{!! $data['ngaysinh'] !!}</td>
+                <td>{!! date('d-m-Y', strtotime($data['ngaysinh'])) !!}</td>
             </tr>
         </table>
         <a href="{!! URL::previous() !!}" class="btn btn-default">Back</a>   

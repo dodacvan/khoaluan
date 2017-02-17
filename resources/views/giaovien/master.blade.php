@@ -26,6 +26,7 @@
 
     <!-- DataTables Responsive CSS -->
     <link href="{{url('public/admin/bower_components/datatables-responsive/css/dataTables.responsive.css')}}" rel="stylesheet">
+    
 </head>
 
 <body>
@@ -108,6 +109,7 @@
                             {!! Session::get('flash_message') !!}
                         </div>
                     @endif
+                    <div id="erroraddsv" style="display:none;" class=" alert alert-danger">Đã nhận đủ sinh viên không thể nhận thêm</div>
                 </div>
 
 
@@ -140,6 +142,62 @@
     <script src="{{url('public/admin/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js')}}"></script>
 	<!-- myscript -->
 	<script src="{{url('public/admin/dist/js/myscript.js')}}"></script>
+    <script type="text/javascript">
+        function xacnhanxoa(msg, $id){
+            if(window.confirm(msg)){
+                deletehnc($id);
+                return true;
+            }
+            return false;
+        }
+
+        function deletehnc($id){
+            $.ajax({
+                type: "POST",
+                url: '/dangky/admin/giaovien/deletehnc',
+                //data: {"txthnc":txthnc, "_token":_token,"giaovien_id":giaovien_id},
+                data: {id:$id, _token:'{!! csrf_token() !!}'},
+                success: function( response ) {
+                    if(response.success == 'true'){
+                        $("#deletemessage").show().delay(1000).slideUp();
+                        window.setTimeout(function(){location.reload()},3000)
+                    }
+                    else
+                        $("#errorMessage1").show().delay(1000).slideUp();
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);            
+                }
+            });  
+        }
+        function xacnhanxoadetai(msg, $id){
+            if(window.confirm(msg)){
+                deletedetai($id);
+                return true;
+            }
+            return false;
+        }
+
+        function deletedetai($id){
+            $.ajax({
+                type: "POST",
+                url: '/dangky/admin/giaovien/deletedetai',
+                //data: {"txthnc":txthnc, "_token":_token,"giaovien_id":giaovien_id},
+                data: {id:$id, _token:'{!! csrf_token() !!}'},
+                success: function( response ) {
+                    if(response.success == 'true'){
+                        $("#deletedetai").show().delay(1000).slideUp();
+                        window.setTimeout(function(){location.reload()},3000)
+                    }
+                    else
+                        $("#errordetai").show().delay(1000).slideUp();
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);            
+                }
+            });  
+        }
+    </script>
     
 </body>
 

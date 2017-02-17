@@ -7,11 +7,10 @@
         <tr align="center">
             <th style="width: 50px">STT</th>
             <th>Tên</th>
+            <th>Đề tài</th>
             <th>Lớp</th>
             <th>Email</th>
             <th>Khoa</th>
-            <th>Delete</th>
-            <th>Edit</th>
         </tr>
     </thead>
     <tbody>
@@ -19,11 +18,12 @@
                     @foreach($data as $item)
                             <tr class="odd gradeX" align="center">
                                 <td>{!! ++$stt; !!}</td>
-                                <td><a href="{!! URL::route('giaovien.infosinhvien', $item['id']) !!}">{!! $item['ten'] !!}</a></td>
-                                <td>{!! $item['lop'] !!}</td>
-                                <td>{!! $item['email'] !!}</td>
+                                <td><a href="{!! URL::route('giaovien.infosinhvien', $item->svid) !!}">{!! $item->ten !!}</a></td>
+                                <td>{!! $item->tendetai !!}</td>
+                                <td>{!! $item->lop !!}</td>
+                                <td>{!! $item->email !!}</td>
                                 <?php
-                                    switch ($item['khoa']) {
+                                    switch ($item->khoa) {
                                         case 0:
                                            echo  '<td>CNTT</td>';
                                             break;
@@ -37,9 +37,6 @@
                                             echo "<td>Truyền thông và mạng máy tính</td>";
                                     }
                                 ?>
-                               
-                             <td class="center"><i class="fa fa-trash-o  fa-fw"></i> Delete</td>
-                                <td class="center"><i class="fa fa-pencil fa-fw"></i>Edit</td>
                             </tr>
                         @endforeach
     </tbody>

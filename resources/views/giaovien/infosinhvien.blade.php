@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <th>Ngày sinh</th>
-                <td>{!! $data['ngaysinh'] !!}</td>
+                <td>{!! date('d-m-Y', strtotime($data['ngaysinh'])) !!}</td>
             </tr>
         </table>
         <a href="{!! URL::previous() !!}" class="btn btn-default">Back</a>   
@@ -59,7 +59,35 @@
             </tr>
             <tr>
                 <th>Ngành</th>
-                <td>{!! $data['nganh'] !!}</td>
+                <?php
+                    switch ($data['nganh']) {
+                        case 0:
+                           echo '<td>CNTT</td>';
+                            break;
+                        case 1:
+                            echo "<td>Khoa học máy tính</td>";
+                            break;
+                        case 2:
+                            echo "<td>Hệ thống thông tin</td>";
+                            break;
+                        case 3:
+                           echo '<td>Truyền thông và mạng máy tính</td>';
+                            break;
+                        case 4:
+                            echo "<td>Vật lý kỹ thuật</td>";
+                            break;
+                        case 5:
+                            echo "<td>Kỹ thuật năng lượng</td>";
+                        case 6:
+                           echo '<td>Công nghệ kỹ thuật điện tử viễn thông</td>';
+                            break;
+                        case 7:
+                            echo "<td>Cơ kỹ thuật</td>";
+                            break;
+                        default:
+                            echo "<td>Công nghệ kỹ thuật cơ điện tử</td>";
+                    }
+                ?>
             </tr>
             <tr>
                 <th>Lop</th>
@@ -67,11 +95,7 @@
             </tr>
             <tr>
                 <th>Giáo viên hướng dẫn</th>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Ngày sinh</th>
-                <td>{!! $data['ngaysinh'] !!}</td>
+                <td>{!! $giaovien['tengiaovien'] !!}</td>
             </tr>
         </table>
         
