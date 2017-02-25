@@ -60,7 +60,7 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="{!! URL::route('sinhvien.info',Auth::user()->id) !!}"><i class="fa fa-info-circle fa-fw"></i>Thông tin cá nhân</a>
+                            <a href="{!! URL::route('sinhvien.info',Auth::user()->id) !!}"><i class="fa fa-info-circle fa-fw"></i> Thông tin cá nhân</a>
                             
                             <!-- /.nav-second-level -->
                         </li>
@@ -69,14 +69,17 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="{!! URL::route('sinhvien.listhnc') !!}"><i class="fa fa-graduation-cap fa-fw"></i>Hướng nghiên cứu</br> tham khảo</a>
+                            <a href="{!! URL::route('sinhvien.listhnc') !!}"><i class="fa fa-graduation-cap fa-fw"></i> Hướng nghiên cứu</br> tham khảo</a>
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="{!! URL::route('sinhvien.listdetai') !!}"><i class="fa fa-book fa-fw"></i>Đề tài tham khảo</a>
+                            <a href="{!! URL::route('sinhvien.listdetai') !!}"><i class="fa fa-book fa-fw"></i> Đề tài tham khảo</a>
                             <!-- /.nav-second-level -->
                         </li>
-                       
+                       <li>
+                            <a href="{!! URL::route('sinhvien.changeinfo') !!}"><i class="fa fa-pencil-square-o fa-fw"></i> Thay đổi thông tin cá nhân</a>
+                            <!-- /.nav-second-level -->
+                        </li>
                         
                     </ul>
                 </div>
@@ -101,6 +104,7 @@
                             {!! Session::get('flash_message') !!}
                         </div>
                     @endif
+                    <div id="errorMessage" style="display:none;" class=" alert alert-danger"></div>
                 </div>
 
 
@@ -133,6 +137,35 @@
     <script src="{{url('public/admin/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js')}}"></script>
 	<!-- myscript -->
 	<script src="{{url('public/admin/dist/js/myscript.js')}}"></script>
+    <script type="text/javascript">
+        function xacnhanxoadetai(msg, $id){
+            if(window.confirm(msg)){
+                deletedetai($id);
+                return true;
+            }
+            return false;
+        }
+
+        function deletedetai($id){
+            $.ajax({
+                type: "POST",
+                url: '/dangky/admin/sinhvien/deletedetai',
+                //data: {"txthnc":txthnc, "_token":_token,"giaovien_id":giaovien_id},
+                data: {id:$id, _token:'{!! csrf_token() !!}'},
+                success: function( response ) {
+                    if(response.success == 'true'){
+                        $("#deletedetaisv").show().delay(1000).slideUp();
+                        window.setTimeout(function(){location.reload()},3000)
+                    }
+                    else
+                        $("#errordeletedetaisv").show().delay(1000).slideUp();
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);            
+                }
+            });  
+        }
+    </script>
     
 </body>
 

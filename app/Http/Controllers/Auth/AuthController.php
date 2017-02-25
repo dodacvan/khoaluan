@@ -31,6 +31,7 @@ class AuthController extends Controller {
 	 */
 	public function __construct(Guard $auth, Registrar $registrar)
 	{
+		
 		$this->auth = $auth;
 		$this->registrar = $registrar;
 
@@ -49,7 +50,7 @@ class AuthController extends Controller {
 		if(Auth::attempt($login)){
 			switch (Auth::user()->type) {
 				case 1:
-					return redirect()->route('giaovien.info',Auth::user()->id);
+					return redirect()->route('giaovien.info');
 					break;
 				case 2:
 					return redirect()->route('sinhvien.listgiaovien');

@@ -14,10 +14,16 @@ use Response;
 use Validator;
 use DB;
 use Redirect;
+use Illuminate\Support\Facades\Auth;
 class GiaovienController extends Controller {
 	
-	public function getinfo($id){
-		$data = Giaovien::where('giaovien_id',$id)->orderBy('id','DESC')->get()->first();
+	public function getcurrentgiaovien(){
+		$giaovien = Giaovien::select('id')->where('giaovien_id','=',Auth::user()->id)->get()->first();
+		return $giaovien['id'];
+	}
+
+	public function getinfo(){
+		$data = Giaovien::where('giaovien_id','=',Auth::user()->id)->get()->first();
 		$hnc = Huongnghiencuu::where('giaovien_id',$data['id'])->get()->toArray();
 		$sinhvien = Sinhvien::select('id','ten')->where('magiaovien',$data['id'])->get()->toArray();
 		$detai = Detai::select('id','ten')->where('giaovien_id',$data['id'])->get()->toArray();
@@ -140,33 +146,87 @@ class GiaovienController extends Controller {
 	    return Response::json($response);
 	}
 
+	
+
 	public function getlistyeucau(){
 		// $data = DB::table('detais')->join('giaoviens', function ($join){
 		// 	            $join->on('giaoviens.id', '=', 'detais.giaovien_id')
 		// 	                 ->where('detais.type','=',0);})
 		// 			->join('sinhviens', function ($join){
 		// 	            $join->on('detais.sinhvien_id', '=', 'sinhviens.sinhvien_id');})
-		// 			->select('detais.*','sinhviens.*','sinhviens.id as idsinhvien','detais.ten as tendt')->get();	
-		$data =  DB::table('yeucaus')->join('sinhviens','yeucaus.sinhvien_id','=','sinhviens.sinhvien_id')->select('yeucaus.*','sinhviens.*','yeucaus.id as yeucauid')->where('yeucaus.status','=',0)->get();
+		// 			->select('detais.*','sinhviens.*','sinhviens.id as idsinhvien','detais.ten as tendt')->get();
+		$giaovien_id = $this->getcurrentgiaovien();
+		$data =  DB::table('yeucaus')->join('sinhviens','yeucaus.sinhvien_id','=','sinhviens.sinhvien_id')->select('yeucaus.*','sinhviens.*','yeucaus.id as yeucauid')->whereIn('yeucaus.status', [0, 2, 4, 5])->where('yeucaus.giaovien_id','=',$giaovien_id)->get(); 
 		return view('giaovien.yeucau',compact('data'));
 	}
 
 	public function postlistyeucau(Request $request){
 		$yeucau = Yeucau::find($request->value);
+		if(!$yeucau){
+			return response()->json([
+				    'success' => 'false',
+				    'message' => 'Không tìm thấy sinh viên'
+			]);
+		}
 		$sinhvien = Sinhvien::where('sinhvien_id',$yeucau->sinhvien_id)->get()->first();
 		$giaovien = Giaovien::where('id',$yeucau->giaovien_id)->get()->first();
 		if($request->action == 'access'){
-			if($this->checksosinhvien($giaovien['hocvi'],$giaovien['sosinhvien'])){
-				return response()->json([
-				    'success' => 'false'
-				]);
+			$check = $this->checksosinhvien($giaovien['hocvi'],$giaovien['sosinhvien']);
+			if($check){
+				switch ($yeucau->status) {
+					case 0:
+						return response()->json([
+						    'success' => 'false',
+						    'message' => 'Đã nhận đủ sinh viên không thể nhận thêm'
+						]);
+						break;
+					case 2:
+						$yeucau->status = 1;
+						$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+						break;
+					default:
+						$yeucau->delete();
+						$sinhvien->magiaovien = 0;
+						$giaovien->sosinhvien = ($giaovien->sosinhvien) - 1;
+						break;
+				}
 			}else{
-				$yeucau->status = 1;
-				$sinhvien->magiaovien = $yeucau->giaovien_id;
-				$giaovien->sosinhvien = ++$giaovien->sosinhvien;
+				switch ($yeucau->status) {
+					case 0:
+						$yeucau->status = 1;
+						$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+						$sinhvien->magiaovien = $yeucau->giaovien_id;
+						$giaovien->sosinhvien = ++$giaovien->sosinhvien;
+						break;
+					case 2:
+						$yeucau->status = 1;
+						$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+						break;
+					default:
+						$yeucau->delete();
+						$sinhvien->magiaovien = 0;
+						$giaovien->sosinhvien = ($giaovien->sosinhvien) - 1;
+						break;
+				}
 			}
 		}else{
-			$yeucau->status = 3;
+			switch ($yeucau->status) {
+				case 0:
+					$yeucau->status = 3;
+					$yeucau->message = "Đề tài không được giáo viên chấp nhận";
+					break;
+				case 2:
+					$yeucau->message = "Thay đổi đề tài không được chấp nhận yêu cầu chỉnh sửa lại";
+					break;
+				case 4:
+					$yeucau->status = 1;
+					$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận";
+					break;
+				default:
+					$yeucau->status = 2;
+					$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận";
+					break;
+			}
 		}
 		$yeucau->save();
 		$sinhvien->save();
@@ -203,12 +263,51 @@ class GiaovienController extends Controller {
 		return view('giaovien.infosinhvien',compact('data','giaovien'));
 	}
 
-	public function getlistsinhvien($id){
-		$giaovien = Giaovien::select('id')->where('giaovien_id',$id)->get()->first();
+	public function getlistsinhvien(){
+		$giaovien = $this->getcurrentgiaovien();
 		//$data = Sinhvien::where('magiaovien',$giaovien->id)->get()->toArray();
-		$data = DB::table('sinhviens')->join('yeucaus','sinhviens.sinhvien_id','=','yeucaus.sinhvien_id')->select('sinhviens.*','sinhviens.id as svid','yeucaus.tendetai')->where('sinhviens.magiaovien',$giaovien->id)->get();
+		$data = DB::table('sinhviens')->join('yeucaus','sinhviens.sinhvien_id','=','yeucaus.sinhvien_id')->select('sinhviens.*','sinhviens.id as svid','yeucaus.tendetai')->where('sinhviens.magiaovien',$giaovien)->get();
 		return view('giaovien.listsinhvien',compact('data'));
 	}
-
-	
+	public function getchangeinfo(){
+		$giaovien_id = $this->getcurrentgiaovien();
+		$data = Giaovien::select('id','email','quequan','diachi','sdt')->where('id',$giaovien_id)->get()->first();
+		return view('giaovien.changeinfo',compact('data'));
+	}
+	public function postchangeinfo(Request $request){
+		if($request->txtPass){
+			$this->validate($request,['txtRePass'=>'required|same:txtPass'],['txtRePass.same'=>'re password not correct',
+			'txtRePass.required'=>'please enter repass',]);
+		}
+		if($request->txtRePass){
+			$this->validate($request,['txtPass'=>'required|same:txtRePass'],['txtRePass.same'=>' password not correct',
+			'txtPass.required'=>'please enter pass',]);
+		}
+		$id = $this->getcurrentgiaovien();
+		$this->validate($request,[
+			'txtemail'=>'required|email|unique:giaoviens,email,'.$id,	
+			'txtdiachi'=>'required',
+			'txtquequan'=>'required',
+			'txtsdt'=>'required|numeric'],[
+			'txtemail.required'=>'Vui lòng điền email',
+			'txtemail.email'=>'Email không đúng định dạng',
+			'txtemail.unique'=>'Email đã tồn tại',
+			'txtdiachi.required'=>'Vui lòng Điền địa chỉ',
+			'txtquequan.required'=>'Vui lòng điền quê quán',
+			'txtsdt.required'=>'Vui lòng điền số điện thoại',
+			'txtsdt.numeric'=>'Số điện thoại phải là số'
+		]);
+		$giaovien = Giaovien::find($id);
+		$user = User::find($giaovien->giaovien_id);
+		$giaovien->email=$request->txtemail;
+		if($request->txtPass){
+			$user->password=Hash::make($request->txtPass);
+		}
+		$giaovien->diachi=$request->txtdiachi;
+		$giaovien->quequan=$request->txtquequan;
+		$giaovien->sdt=$request->txtsdt;
+		$giaovien->save();
+		$user->save();
+		return redirect()->route('giaovien.info')->with(['flash_message'=>'Sửa thông tin thành công']);
+	}
 }

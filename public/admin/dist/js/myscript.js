@@ -21,6 +21,7 @@ function nameofdetai($value,$id){
     $("#iddetai").val($id);
 }
 
+// them huong nghien cuu cua giaovien
 $('#addhuongnghiencuu').on( 'submit', function(e) {
   e.preventDefault();  
   $.ajax({
@@ -36,7 +37,7 @@ $('#addhuongnghiencuu').on( 'submit', function(e) {
                 window.setTimeout(function(){location.reload()},3000)
             }
         	else
-        		$("#errorMessage").show().delay(1000).slideUp();
+        		$("#errorMessageaddhnc").show().delay(1000).slideUp();
         },
         error: function (request, status, error) {
         	alert(request.responseText);        	
@@ -44,12 +45,12 @@ $('#addhuongnghiencuu').on( 'submit', function(e) {
     });	
 });
 
+// sua de tai cua giao vien
 $('#edithncform').on( 'submit', function(e) {
   e.preventDefault();
   $.ajax({
         type: "POST",
         url: '/dangky/admin/giaovien/edithnc',
-        //data: {"txthnc":txthnc, "_token":_token,"giaovien_id":giaovien_id},
         data: $("#edithncform").serialize(),
         success: function( response ) {
             if(response.success == 'true'){
@@ -62,19 +63,17 @@ $('#edithncform').on( 'submit', function(e) {
                 $("#errorMessage2").show().delay(1000).slideUp();
         },
         error: function (request, status, error) {
-            alert(request.responseText);
-            
+            alert(request.responseText);    
         }
-    });
-    
+    }); 
 });
 
+// them de tai cua giao vien
 $('#adddetaiform').on( 'submit', function(e) {
     e.preventDefault(); 
   $.ajax({
         type: "POST",
         url: '/dangky/admin/giaovien/adddetai',
-        //data: {"txthnc":txthnc, "_token":_token,"giaovien_id":giaovien_id},
         data: $("#adddetaiform").serialize(),
         success: function( response ) {
         	if(response.success == 'true'){
@@ -87,19 +86,17 @@ $('#adddetaiform').on( 'submit', function(e) {
         		$("#errorMessage3").show().delay(1000).slideUp();
         },
         error: function (request, status, error) {
-        	alert(request.responseText);
-        	
+        	alert(request.responseText);	
     	}
     });
- 	
 });
 
+// sua de tai ma giao vien add len
 $('#editdetaiform').on( 'submit', function(e) {
   e.preventDefault();
   $.ajax({
         type: "POST",
         url: '/dangky/admin/giaovien/editdetai',
-        //data: {"txthnc":txthnc, "_token":_token,"giaovien_id":giaovien_id},
         data: $("#editdetaiform").serialize(),
         success: function( response ) {
             if(response.success == 'true'){
@@ -112,15 +109,14 @@ $('#editdetaiform').on( 'submit', function(e) {
                 $("#errorMessage4").show().delay(1000).slideUp();
         },
         error: function (request, status, error) {
-            alert(request.responseText);
-            
+            alert(request.responseText);   
         }
-    });
-    
+    });    
 });
 
+//tien hanh xu li chap nhan hay khong chap nhan tu sinh vien
 $('.access').on('click',function(){
-    var value = $(this).val();
+    // var value = $(this).val();
     var token = $(this).data('token');
     var value = $(this).data('value');
     $.ajaxSetup({
@@ -135,10 +131,38 @@ $('.access').on('click',function(){
         success: function(response){
             if(response.success == 'true')
                 window.location = window.location.pathname;
-            else
-                 $("#erroraddsv").show().delay(1000).slideUp();
+            else{
+                //$('#errorMessage').empty();
+                $("#errorMessage").append(response.message).show().delay(1000).slideUp();
+                window.setTimeout(function(){$('#errorMessage').empty();},1000)   
+            }
         },
         error: function(request){}
-    });
-    
+    });  
+});
+
+// sinh vien sua de tai
+$('#editdetaisv').on( 'submit', function(e) {
+  e.preventDefault();
+  $.ajax({
+        type: "POST",
+        url: '/dangky/admin/sinhvien/editdetai',
+        data: $("#editdetaisv").serialize(),
+        success: function( response ) {
+            if(response.success == 'true'){
+                $("#messagerequest").show().delay(1000).slideUp();
+                $('#editdetaisv')[0].reset();
+                $('#editdetaimodalsv').modal('hide');
+                window.setTimeout(function(){location.reload()},3000)
+            }
+            else if(response.status == 1){
+                $("#errorMessagesv").show().delay(1000).slideUp();
+            }else{
+                $("#errorMessagesvnotfound").show().delay(1000).slideUp();
+            }
+        },
+        error: function (request, status, error) {
+            alert(request.responseText);    
+        }
+    });  
 });

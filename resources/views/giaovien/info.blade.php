@@ -271,7 +271,7 @@
                 <input class="form-control" name="txthnc" id="txthnc" placeholder="Điền hướng nghiên cứu"/>
             </div>
            
-           <div id="errorMessage" style="display:none;" class="alert-danger">Vui lòng nhập hướng nghiên cứu</div>
+           <div id="errorMessageaddhnc" style="display:none;" class="alert-danger">Vui lòng nhập hướng nghiên cứu</div>
            
           </div>
           <div class="modal-footer">

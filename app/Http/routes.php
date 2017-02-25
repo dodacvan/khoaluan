@@ -35,7 +35,7 @@ Route::get('downloadExcel/{type}', 'DetaiController@downloadExcel');
 Route::post('importExcel', 'DetaiController@importExcel');
 
 Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
-	Route::group(['prefix'=>'giaovu'],function(){
+	Route::group(['prefix'=>'giaovu','middleware'=>'checkadmin'],function(){
 		Route::get('addgiaovien',['as'=>'giaovu.addgiaovien','uses'=>'GiaovuController@getaddgiaovien']);
 		Route::post('addgiaovien',['as'=>'giaovu.addgiaovienpost','uses'=>'GiaovuController@postaddgiaovien']);
 		Route::get('listgiaovien',['as'=>'giaovu.listgiaovien','uses'=>'GiaovuController@getlistgiaovien']);
@@ -52,8 +52,8 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 		Route::get('downdetai/{type}',['as'=>'giaovu.downdetai','uses'=>'GiaovuController@downdetai']);
 	});
 
-	Route::group(['prefix'=>'giaovien'],function(){
-		Route::get('info/{id}',['as'=>'giaovien.info','uses'=>'GiaovienController@getinfo']);
+	Route::group(['prefix'=>'giaovien','middleware'=>'checkgiaovien'],function(){
+		Route::get('info',['as'=>'giaovien.info','uses'=>'GiaovienController@getinfo']);
 		Route::post('addhnc',['as'=>'giaovien.addhncpost','uses'=>'GiaovienController@postaddhnc']);
 		Route::post('edithnc',['as'=>'giaovien.edithnc','uses'=>'GiaovienController@edithnc']);
 		Route::post('deletehnc',['as'=>'giaovien.deletehnc','uses'=>'GiaovienController@deletehnc']);
@@ -63,16 +63,24 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 		Route::get('listyeucau',['as'=>'giaovien.listyeucau','uses'=>'GiaovienController@getlistyeucau']);
 		Route::post('listyeucau',['as'=>'giaovien.listyeucaupost','uses'=>'GiaovienController@postlistyeucau']);
 		Route::get('infosinhvien/{id}',['as'=>'giaovien.infosinhvien','uses'=>'GiaovienController@getinfosinhvien']);
-		Route::get('listsinhvien/{id}',['as'=>'giaovien.listsinhvien','uses'=>'GiaovienController@getlistsinhvien']);
+		Route::get('listsinhvien',['as'=>'giaovien.listsinhvien','uses'=>'GiaovienController@getlistsinhvien']);
+		Route::get('changeinfo',['as'=>'giaovien.changeinfo','uses'=>'GiaovienController@getchangeinfo']);
+		Route::post('changeinfo',['as'=>'giaovien.postchangeinfo','uses'=>'GiaovienController@postchangeinfo']);
 	});
   
-	Route::group(['prefix'=>'sinhvien'],function(){
-		Route::get('info/{id}',['as'=>'sinhvien.info','uses'=>'SinhvienController@getinfo']);
+	Route::group(['prefix'=>'sinhvien','middleware'=>'checksinhvien'],function(){
+		Route::get('info',['as'=>'sinhvien.info','uses'=>'SinhvienController@getinfo']);
 		Route::get('listgiaovien',['as'=>'sinhvien.listgiaovien','uses'=>'SinhvienController@getlistgiaovien']);
 		Route::get('adddetai/{id}',['as'=>'sinhvien.adddetai','uses'=>'SinhvienController@getadddetai']);
 		Route::post('adddetai/{id}',['as'=>'sinhvien.adddetaipost','uses'=>'SinhvienController@postadddetai']);
 		Route::get('infogiaovien/{id}',['as'=>'sinhven.infogiaovien','uses'=>'SinhvienController@getinfogiaovien']);
 		Route::get('listhnc',['as'=>'sinhvien.listhnc','uses'=>'SinhvienController@getlisthnc']);
 		Route::get('listdetai',['as'=>'sinhvien.listdetai','uses'=>'SinhvienController@getlistdetai']);
+		Route::post('editdetai',['as'=>'sinvien.editdetai','uses'=>'SinhvienController@posteditdetai']);
+		Route::post('deletedetai',['as'=>'sinhvien.deletedetai','uses'=>'SinhvienController@deletedetai']);
+		Route::get('changeinfo',['as'=>'sinhvien.changeinfo','uses'=>'SinhvienController@getchangeinfo']);
+		Route::post('changeinfo',['as'=>'sinhvien.postchangeinfo','uses'=>'SinhvienController@postchangeinfo']);
 	});
+
+
 });

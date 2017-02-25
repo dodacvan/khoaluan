@@ -62,27 +62,19 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="{!! URL::route('giaovien.info', Auth::user()->id) !!}"><i class="fa fa-group fa-fw"></i> Thông tin cá nhân</a>
+                            <a href="{!! URL::route('giaovien.info') !!}"><i class="fa fa-info-circle fa-fw"></i> Thông tin cá nhân</a>
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="{!! URL::route('giaovien.listyeucau') !!}"><i class="fa fa-pencil-square fa-fw"></i>Yêu cầu</a>                        
+                            <a href="{!! URL::route('giaovien.listyeucau') !!}"><i class="fa fa-envelope fa-fw"></i> Yêu cầu</a>                        
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="{!! URL::route('giaovien.listsinhvien',Auth::user()->id) !!}"><i class="fa fa-pencil-square fa-fw"></i>Danh sinh viên hướng dẫn</a>                        
+                            <a href="{!! URL::route('giaovien.listsinhvien') !!}"><i class="fa fa-list fa-fw"></i> Danh sách sinh viên hướng dẫn</a>                        
                             <!-- /.nav-second-level -->
                         </li>
                        <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Category<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#">List Category</a>
-                                </li>
-                                <li>
-                                    <a href="#">Add Category</a>
-                                </li>
-                            </ul>
+                            <a href="{!! URL::route('giaovien.changeinfo') !!}"><i class="fa fa-pencil-square-o fa-fw"></i> Chỉnh sửa thông tin cá nhân</a>
                             <!-- /.nav-second-level -->
                         </li>
                         
@@ -109,7 +101,7 @@
                             {!! Session::get('flash_message') !!}
                         </div>
                     @endif
-                    <div id="erroraddsv" style="display:none;" class=" alert alert-danger">Đã nhận đủ sinh viên không thể nhận thêm</div>
+                    <div id="errorMessage" style="display:none;" class=" alert alert-danger"></div>
                 </div>
 
 
