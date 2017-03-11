@@ -145,7 +145,7 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
-
+		'ConsoleTVs\Charts\ChartsServiceProvider'
 	],
 
 	/*
@@ -194,7 +194,7 @@ return [
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
 		'Excel' => 'Maatwebsite\Excel\Facades\Excel',
-
+		'Charts' => 'ConsoleTVs\Charts\Charts',
 	],
 
 ];

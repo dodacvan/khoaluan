@@ -92,7 +92,7 @@
                                     <a href="{!! URL::route('giaovu.xuatbaocaodetai') !!}">Đề tài</a>
                                 </li>
                                 <li>
-                                    <a href="#">Giáo viên</a>
+                                    <a href="{!! URL::route('giaovu.chart') !!}">Biểu đồ thống kê</a>
                                 </li>
                                 <li>
                                     <a href="#">Sinh viên</a>
@@ -178,6 +178,7 @@
             });
         });
     </script>
+
 </body>
 
 </html>

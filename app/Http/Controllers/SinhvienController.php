@@ -86,7 +86,9 @@ class SinhvienController extends Controller {
 
 	public function getinfogiaovien($id){
 		$data = Giaovien::where('id',$id)->orderBy('id','DESC')->get()->first();
-		return view('sinhvien.infogiaovien',compact('data'));
+		$hnc = Huongnghiencuu::where('giaovien_id',$data['id'])->get()->toArray();
+		$detai = Detai::select('id','ten')->where('giaovien_id',$data['id'])->get()->toArray();
+		return view('sinhvien.infogiaovien',compact('data','hnc','detai'));
 	}
 
 	public function getlisthnc(){
@@ -122,7 +124,7 @@ class SinhvienController extends Controller {
 				]);
 			}
 	        $yeucau->tendetai = $request->edittxtdetai;
-	        if(in_array($yeucau->status, [1,2,4,5])){
+	        if(in_array($yeucau->status, [1,2,4,5,6,7])){
 	        	$yeucau->status = 2;
 	        	$yeucau->message = "Thay đổi đề tài đã được chuyển đến giáo viên chờ phê duyệt";
 	        }else{
@@ -143,12 +145,12 @@ class SinhvienController extends Controller {
 			switch ($yeucau->status) {
 				case 1:
 					$yeucau->status = 4;
-					$yeucau->message = "Yêu cầu hủy đăng kí đã được chuyển đến giáo viên chờ phê duyệt";
+					$yeucau->message = "Bạn đã yêu cầu hủy đăng kí, giáo viên đang phê duyệt";
 					$yeucau->save();
 					break;
 				case 2:
 					$yeucau->status = 5;
-					$yeucau->message = "Yêu cầu hủy đăng kí đã được chuyển đến giáo viên chờ phê duyệt";
+					$yeucau->message = "Bạn đã yêu cầu hủy đăng kí, giáo viên đang phê duyệt";
 					$yeucau->save();
 					break;
 				case 0:
@@ -157,12 +159,22 @@ class SinhvienController extends Controller {
 					break;
 				case 4:
 					$yeucau->status = 1;
-					$yeucau->message = "Yêu cầu hủy đăng kí được hủy bỏ thành công";
+					$yeucau->message = "Yêu cầu hủy đăng kí được hủy bỏ thành công, bạn phải tiếp tục thực hiện đề tài";
 					$yeucau->save();
 					break;
 				case 5:
 					$yeucau->status = 2;
 					$yeucau->message = "Đề tài được gửi lại tới giáo viên chờ phê duyệt";
+					$yeucau->save();
+					break;
+				case 6:
+					$yeucau->status = 7;
+					$yeucau->message = "Bạn đã yêu cầu hủy đăng kí, giáo viên đang phê duyệt";
+					$yeucau->save();
+					break;
+				case 7:
+					$yeucau->status = 6;
+					$yeucau->message = "Yêu cầu hủy đăng kí được hủy bỏ thành công, bạn cần đề xuất đề tài mới tới giáo viên";
 					$yeucau->save();
 					break;
 				default:

@@ -156,7 +156,7 @@ class GiaovienController extends Controller {
 		// 	            $join->on('detais.sinhvien_id', '=', 'sinhviens.sinhvien_id');})
 		// 			->select('detais.*','sinhviens.*','sinhviens.id as idsinhvien','detais.ten as tendt')->get();
 		$giaovien_id = $this->getcurrentgiaovien();
-		$data =  DB::table('yeucaus')->join('sinhviens','yeucaus.sinhvien_id','=','sinhviens.sinhvien_id')->select('yeucaus.*','sinhviens.*','yeucaus.id as yeucauid')->whereIn('yeucaus.status', [0, 2, 4, 5])->where('yeucaus.giaovien_id','=',$giaovien_id)->get(); 
+		$data =  DB::table('yeucaus')->join('sinhviens','yeucaus.sinhvien_id','=','sinhviens.sinhvien_id')->select('yeucaus.*','sinhviens.*','yeucaus.id as yeucauid')->whereIn('yeucaus.status', [0, 2, 4, 5, 7])->where('yeucaus.giaovien_id','=',$giaovien_id)->get(); 
 		return view('giaovien.yeucau',compact('data'));
 	}
 
@@ -173,6 +173,7 @@ class GiaovienController extends Controller {
 		if($request->action == 'access'){
 			$check = $this->checksosinhvien($giaovien['hocvi'],$giaovien['sosinhvien']);
 			if($check){
+
 				switch ($yeucau->status) {
 					case 0:
 						return response()->json([
@@ -183,6 +184,7 @@ class GiaovienController extends Controller {
 					case 2:
 						$yeucau->status = 1;
 						$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+						$yeucau->save();
 						break;
 					default:
 						$yeucau->delete();
@@ -197,10 +199,12 @@ class GiaovienController extends Controller {
 						$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
 						$sinhvien->magiaovien = $yeucau->giaovien_id;
 						$giaovien->sosinhvien = ++$giaovien->sosinhvien;
+						$yeucau->save();
 						break;
 					case 2:
 						$yeucau->status = 1;
 						$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+						$yeucau->save();
 						break;
 					default:
 						$yeucau->delete();
@@ -214,21 +218,31 @@ class GiaovienController extends Controller {
 				case 0:
 					$yeucau->status = 3;
 					$yeucau->message = "Đề tài không được giáo viên chấp nhận";
+					$yeucau->save();
 					break;
 				case 2:
+					$yeucau->status = 6;
 					$yeucau->message = "Thay đổi đề tài không được chấp nhận yêu cầu chỉnh sửa lại";
+					$yeucau->save();
 					break;
 				case 4:
 					$yeucau->status = 1;
 					$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận";
+					$yeucau->save();
 					break;
-				default:
+				case 5:
 					$yeucau->status = 2;
 					$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận";
+					$yeucau->save();
+					break;
+				default:
+					$yeucau->status = 6;
+					$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận thay đổi lại đề tài mới để giáo viên phê duyệt";
+					$yeucau->save();
 					break;
 			}
 		}
-		$yeucau->save();
+		
 		$sinhvien->save();
 		$giaovien->save();
 		return response()->json([
@@ -266,7 +280,7 @@ class GiaovienController extends Controller {
 	public function getlistsinhvien(){
 		$giaovien = $this->getcurrentgiaovien();
 		//$data = Sinhvien::where('magiaovien',$giaovien->id)->get()->toArray();
-		$data = DB::table('sinhviens')->join('yeucaus','sinhviens.sinhvien_id','=','yeucaus.sinhvien_id')->select('sinhviens.*','sinhviens.id as svid','yeucaus.tendetai')->where('sinhviens.magiaovien',$giaovien)->get();
+		$data = DB::table('sinhviens')->join('yeucaus','sinhviens.sinhvien_id','=','yeucaus.sinhvien_id')->select('sinhviens.*','sinhviens.id as svid','yeucaus.tendetai','yeucaus.status')->where('sinhviens.magiaovien',$giaovien)->get();
 		return view('giaovien.listsinhvien',compact('data'));
 	}
 	public function getchangeinfo(){

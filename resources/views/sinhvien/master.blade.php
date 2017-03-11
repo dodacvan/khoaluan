@@ -60,7 +60,7 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="{!! URL::route('sinhvien.info',Auth::user()->id) !!}"><i class="fa fa-info-circle fa-fw"></i> Thông tin cá nhân</a>
+                            <a href="{!! URL::route('sinhvien.info') !!}"><i class="fa fa-info-circle fa-fw"></i> Thông tin cá nhân</a>
                             
                             <!-- /.nav-second-level -->
                         </li>

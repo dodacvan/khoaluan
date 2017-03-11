@@ -5,23 +5,27 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GiaovienRequest;
 use App\Http\Requests\SinhvienRequest;
 use Illuminate\Http\Request;
-
 use App\Giaovien;
 use App\Sinhvien;
 use App\User;
 use App\Detai;
+use App\Yeucau;
 use Hash;
 use Auth;
 use DB;
 use Response;
 use Excel;
+use Charts;
+
 class GiaovuController extends Controller {
 
-	public function getaddgiaovien(){
+	public function getaddgiaovien()
+	{
 		return view('giaovu.addgiaovien');
 	}
 
-	public function postaddgiaovien(GiaovienRequest $request){
+	public function postaddgiaovien(GiaovienRequest $request)
+	{
 		$user = new User();
 		$ten = $this->exname($request->txtName);
 		$check = User::select('id')->where('type', 1)->where('name','like',$ten.'%')->get()->toArray();
@@ -41,8 +45,7 @@ class GiaovuController extends Controller {
 		$giaovien->tengiaovien = $request->txtName;
 		$giaovien->email = $data['email'];
 		$giaovien->magiaovien = $data['id'];
-		$timestamp = strtotime('7/7/1968');
-		$giaovien->ngaysinh = date("Y-m-d H:i:s",$timestamp);
+		$giaovien->ngaysinh = $request->txtBirth;
 		$giaovien->quequan = $request->txtProvince;
 		$giaovien->gioitinh = $request->txtSex;
 		$giaovien->diachi = $request->txtAddress;
@@ -230,13 +233,19 @@ class GiaovuController extends Controller {
 		})->download($type);
 	}
 
-	public function gettest(Request $request){
-		echo $request->input('test');
-		return view('test')->with('name', 'Victoria')->with('id','uuuu');
-	}
-
-	public function posttest(Request $request){
-
-		echo $request->input('test');
-	}
+	public function getchart()
+    {
+    	$data1 = Yeucau::whereIn('status', [1, 4])->count();
+    	$data2 = Yeucau::whereIn('status', [2, 5])->count();
+    	$data3 = Sinhvien::all()->count();
+    	$data3 = $data3 - $data1 - $data2;
+        $chart = Charts::create('pie', 'highcharts')
+            //->setView('custom.line.chart.view') // Use this if you want to use your own template
+            ->setTitle('My nice chart')
+            ->setLabels(['Sinh viên đã được giáo viên chấp nhận đã hoàn thiện đề tài', 'Sinh viên đã được giáo viên chấp nhận đề tài đang hoàn thiện', 'Sinh viên chưa đăng kí hoặc chưa được giáo viên chấp nhận'])
+            ->setValues([$data1,$data2,$data3])
+            ->setDimensions(1000,500)
+            ->setResponsive(true);
+        return view('giaovu.chart', ['chart' => $chart]);
+    }
 }

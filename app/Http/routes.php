@@ -22,14 +22,6 @@ Route::controllers([
 Route::get('addadmin','GiaovuController@addadmin');
 Route::get('login',['as'=>'login.new','uses'=>'Auth\AuthController@getLogin']);
 Route::post('login',['as'=>'login.newpost','uses'=>'Auth\AuthController@postLogin']);
-// Route::get('test',['middleware'=>'test', 'as'=>'test', function($id){
-// 	echo 'test';
-// 	echo $id;
-// }]);
-Route::get('test','GiaovuController@gettest');
-Route::post('test','GiaovuController@posttest');
-
-
 Route::get('importExport', 'DetaiController@importExport');
 Route::get('downloadExcel/{type}', 'DetaiController@downloadExcel');
 Route::post('importExcel', 'DetaiController@importExcel');
@@ -50,6 +42,9 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 		Route::get('getkhoa',['as'=>'giaovu.getkhoa','uses'=>'GiaovuController@getkhoa']);
 		Route::get('xuatbaocaodetai',['as'=>'giaovu.xuatbaocaodetai','uses'=>'GiaovuController@baocaodetai']);
 		Route::get('downdetai/{type}',['as'=>'giaovu.downdetai','uses'=>'GiaovuController@downdetai']);
+		Route::get('chart',['as'=>'giaovu.chart','uses'=>'GiaovuController@getchart']);
+
+		// Route::get('addhocvien',['as'=>'giaovu.addhocvien','uses'=>'GiaovuController@getaddhocvien']);
 	});
 
 	Route::group(['prefix'=>'giaovien','middleware'=>'checkgiaovien'],function(){

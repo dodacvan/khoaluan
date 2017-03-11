@@ -19,7 +19,16 @@
                 <tr class="odd gradeX" align="center">
                     <td>{!! ++$stt; !!}</td>
                     <td><a href="{!! URL::route('giaovien.infosinhvien', $item->svid) !!}">{!! $item->ten !!}</a></td>
-                    <td>{!! $item->tendetai !!}</td>
+                    <?php
+                        switch ($item->status) {
+                            case 2:
+                            case 5:
+                               echo  "<td style='color: yellow'>$item->tendetai</td>";
+                                break;
+                            default:
+                                echo "<td style='color: green'>$item->tendetai</td>";
+                        }
+                    ?>
                     <td>{!! $item->lop !!}</td>
                     <td>{!! $item->email !!}</td>
                     <?php

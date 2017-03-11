@@ -28,7 +28,7 @@
                            echo  "<td style='color: green'>Đăng kí</td>";
                             break;
                         case 2:
-                            echo "<td style='color: blue'>Chỉnh sửa đề tài</td>";
+                            echo "<td style='color: yellow'>Chỉnh sửa đề tài</td>";
                             break;
                         default:
                             echo "<td style='color: red'>Hủy đăng kí</td>";
