@@ -2,17 +2,21 @@
 @section('controller','Thêm')
 @section('action','Giáo viên')
 @section('content')
-<div class="container">
 		<!-- <a href="{{ URL::to('downloadExcel/xls') }}"><button class="btn btn-success">Download Excel xls</button></a>
 		<a href="{{ URL::to('downloadExcel/xlsx') }}"><button class="btn btn-success">Download Excel xlsx</button></a>
 		<a href="{{ URL::to('downloadExcel/csv') }}"><button class="btn btn-success">Download CSV</button></a> -->
+
 		<form  action="{{ URL::to('importExcel') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
-			<label>Chọn file</label>
-			<input type="file" name="import_file" />
-			<button class="btn btn-primary">Import File</button>
+			<div class="col-lg-12">
+				<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+				<div class="form-group">
+					<label>Chọn file</label>
+					<input type="file" name="import_file" />
+				</div>
+				<button class="btn btn-primary">Import File</button>
+			</div>
 		</form>
-	</div>
+	
 <form enctype="multipart/form-data" action="" method="POST">
 <div class="col-lg-6" style="padding-bottom:120px">  
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
@@ -29,7 +33,7 @@
 
         <div class="form-group">
             <label>Email</label>
-            <input class="form-control" name="txtemail" placeholder="Điền email" value="{!! old('txtemail') !!}"/>
+            <input type="email" class="form-control" name="txtemail" placeholder="Điền email" value="{!! old('txtemail') !!}"/>
         </div>
 		@if($errors->first('txtemail'))
                 <div class="alert alert-danger">
@@ -79,6 +83,8 @@
 		{!! $errors->first('txtSex') !!}
 	    </div>
 		@endif  
+		<button type="submit" class="btn btn-info">Thêm</button>
+        <button type="reset" class="btn btn-default">Thiết lập lại</button>
 </div>
 <div class="col-lg-6" style="padding-bottom:120px">
 				
@@ -95,12 +101,12 @@
         <div class="form-group">
             <label>Chức danh</label>
             <select class="form-control" name="txtTitle">
-					<option value="0"></option>
-					<option value="1">GV</option>
-					<option value="2">GVC</option>
-					<option value="3">NVC</option>
-					<option value="4">GVTH</option>
-					<option value="5">GVCC</option>
+					<option value=""></option>
+					<option value="GV">GV</option>
+					<option value="GVC">GVC</option>
+					<option value="NVC">NVC</option>
+					<option value="GVTH">GVTH</option>
+					<option value="GVCC">GVCC</option>
 			 </select>
         </div>
 		@if($errors->first('txtTitle'))
@@ -112,9 +118,9 @@
 		<div class="form-group">
             <label>Học hàm</label>
             <select class="form-control" name="txtAcademic">
-					<option value="0"></option>
-					<option value="1">Phó giáo sư</option>
-					<option value="2">Giáo sư</option>
+					<option value=""></option>
+					<option value="PGS">Phó giáo sư</option>
+					<option value="GS">Giáo sư</option>
 			 </select>
         </div>
 		@if($errors->first('txtAcademic'))
@@ -126,10 +132,10 @@
 		<div class="form-group">
             <label>Học vị</label>
             <select class="form-control" name="txtDegree">
-					<option value="0"></option>
-					<option value="1">Cử nhân</option>
-					<option value="2">Thạc sĩ</option>
-					<option value="3">Tiến sĩ</option>
+					<option value=""></option>
+					<option value="CN">Cử nhân</option>
+					<option value="Ths">Thạc sĩ</option>
+					<option value="TS">Tiến sĩ</option>
 			 </select>
         </div>
 		@if($errors->first('txtDegree'))
@@ -138,7 +144,7 @@
 	    </div>
 		@endif
 
-		<div class="form-group">
+		<!-- <div class="form-group">
             <label>Khoa</label>
             <select class="form-control" name="txtDepart" id="gvdepart">
 					<option value="0">CNTT</option>
@@ -151,19 +157,19 @@
                 <div class="alert alert-danger">
 		{!! $errors->first('txtDepart') !!}
 	    </div>
-		@endif
+		@endif -->
 
 		<div class="form-group">
             <label>Bộ môn</label>
             <select class="form-control" name="txtSubject" id="gvclass">
-					<option value="1">Công nghệ phần mềm</option>
-					<option value="2">Hệ thống thông tin</option>
-					<option value="3">Khoa học máy tính</option>
-					<option value="4">Mạng và truyền thông máy tính</option>
-					<option value="5">Các PP toán trong CN</option>
-					<option value="6">PTN Công nghệ tri thức</option>
-					<option value="7">PTN hệ thống nhúng</option>
-					<option value="8">PTN Tương tác người máy</option>
+					<option value="Công nghệ phần mềm">Công nghệ phần mềm</option>
+					<option value="Hệ thống thông tin">Hệ thống thông tin</option>
+					<option value="Khoa học máy tính">Khoa học máy tính</option>
+					<option value="Mạng và truyền thông máy tính">Mạng và truyền thông máy tính</option>
+					<option value="Các PP toán trong CN">Các PP toán trong CN</option>
+					<option value="PTN Công nghệ tri thức">PTN Công nghệ tri thức</option>
+					<option value="PTN hệ thống nhúng">PTN hệ thống nhúng</option>
+					<option value="PTN Tương tác người máy">PTN Tương tác người máy</option>
 			 </select>
         </div>
 		@if($errors->first('txtSubject'))
@@ -172,8 +178,6 @@
 	    </div>
 		@endif
                             
-        <button type="submit" class="btn btn-info">Thêm</button>
-        <button type="reset" class="btn btn-default">Thiết lập lại</button>
    
 </div>
  <form>

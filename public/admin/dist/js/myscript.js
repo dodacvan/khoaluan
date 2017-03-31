@@ -10,6 +10,12 @@ $('a#del').click(function(){
 		
 });
 
+function xacnhanxoa(msg){
+    if(window.confirm(msg)){
+        return true;
+    }
+    return false;
+}
 
 function nameofhnc($value,$id){
     $("#edittxthnc").val($value);
@@ -131,10 +137,12 @@ $('.access').on('click',function(){
         success: function(response){
             if(response.success == 'true')
                 window.location = window.location.pathname;
-            else{
+            else if(response.success == 'false') {
                 //$('#errorMessage').empty();
                 $("#errorMessage").append(response.message).show().delay(1000).slideUp();
                 window.setTimeout(function(){$('#errorMessage').empty();},1000)   
+            } else {
+                alert('hết hạn đăng kí');
             }
         },
         error: function(request){}
@@ -155,10 +163,12 @@ $('#editdetaisv').on( 'submit', function(e) {
                 $('#editdetaimodalsv').modal('hide');
                 window.setTimeout(function(){location.reload()},3000)
             }
-            else if(response.status == 1){
+            else if(response.status == 1 && response.success == 'false'){
                 $("#errorMessagesv").show().delay(1000).slideUp();
-            }else{
+            }else if(response.status == 2 && response.success == 'false'){
                 $("#errorMessagesvnotfound").show().delay(1000).slideUp();
+            }else{
+                alert('het han dang ki');
             }
         },
         error: function (request, status, error) {

@@ -30,6 +30,7 @@ class Kernel extends HttpKernel {
 		'checkadmin'=> 'App\Http\Middleware\Checkadmin',
 		'checkgiaovien'=> 'App\Http\Middleware\Checkgiaovien',
 		'checksinhvien'=> 'App\Http\Middleware\Checksinhvien',
+		'checktime'=> 'App\Http\Middleware\CheckTime',
 	];
 
 }

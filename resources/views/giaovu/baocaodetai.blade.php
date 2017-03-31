@@ -2,7 +2,8 @@
 @section('controller','Danh sách')
 @section('action','Đề tài')
 @section('content')
-<a href="{{ URL::route('giaovu.downdetai','xls') }}"><button class="btn btn-success">Download Excel xls</button></a>
+<a href="{{ URL::route('giaovu.downdetai','xls') }}"><button class="btn btn-success" style="margin-bottom: 10px;">Download Excel xls</button></a>
+<a href="{{ URL::route('giaovu.chart') }}"><button class="btn btn-success" style="margin-bottom: 10px;">Bieu do</button></a>
 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
     <thead>
         <tr align="center">
@@ -15,15 +16,15 @@
     </thead>
     <tbody>
     <?php $stt=0; ?>
-                    @foreach($data as $item)
-                            <tr class="odd gradeX" align="center">
-                                <td>{!! ++$stt; !!}</td>
-                                <td>{!! $item->tendetai !!}</td>
-                                <td><a href="{!! URL::route('giaovu.infosinhvien',$item->svid) !!}">{!! $item->ten !!}</a></td>
-                                <td><a href="{!! URL::route('giaovu.infogiaovien',$item->id) !!}">{!! $item->tengiaovien !!}</a></td>
-                                <td>{!! $item->created_at !!}</td>
-                            </tr>
-                        @endforeach
+        @foreach($data as $item)
+            <tr class="odd gradeX" align="center">
+                <td>{!! ++$stt; !!}</td>
+                <td>{!! $item->tendetai !!}</td>
+                <td><a href="{!! URL::route('giaovu.infosinhvien',$item->svid) !!}">{!! $item->ten !!}</a></td>
+                <td><a href="{!! URL::route('giaovu.infogiaovien',$item->id) !!}">{!! $item->tengiaovien !!}</a></td>
+                <td>{!! $item->created_at !!}</td>
+            </tr>
+        @endforeach
     </tbody>
 </table>
 @endsection()

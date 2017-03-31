@@ -40,54 +40,8 @@
      <div class="col-xs-6">
         <table class="table table-striped">
             <tr>
-                <th>Khoa</th>
-                <?php
-                    switch ($data['khoa']) {
-                        case 0:
-                           echo  '<td>CNTT</td>';
-                            break;
-                        case 1:
-                            echo "<td>Vật lý kĩ thuật</td>";
-                            break;
-                        case 2:
-                            echo "<td>Cơ kĩ thuật</td>";
-                            break;
-                        default:
-                            echo "<td>Truyền thông và mạng máy tính</td>";
-                    }
-                ?>
-            </tr>
-            <tr>
                 <th>Ngành</th>
-                <?php
-                    switch ($data['nganh']) {
-                        case 0:
-                           echo '<td>CNTT</td>';
-                            break;
-                        case 1:
-                            echo "<td>Khoa học máy tính</td>";
-                            break;
-                        case 2:
-                            echo "<td>Hệ thống thông tin</td>";
-                            break;
-                        case 3:
-                           echo '<td>Truyền thông và mạng máy tính</td>';
-                            break;
-                        case 4:
-                            echo "<td>Vật lý kỹ thuật</td>";
-                            break;
-                        case 5:
-                            echo "<td>Kỹ thuật năng lượng</td>";
-                        case 6:
-                           echo '<td>Công nghệ kỹ thuật điện tử viễn thông</td>';
-                            break;
-                        case 7:
-                            echo "<td>Cơ kỹ thuật</td>";
-                            break;
-                        default:
-                            echo "<td>Công nghệ kỹ thuật cơ điện tử</td>";
-                    }
-                ?>
+                <td>{!! $data['nganh'] !!}</td>
             </tr>
             <tr>
                 <th>Lop</th>

@@ -89,15 +89,23 @@
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Xuất báo cáo<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="{!! URL::route('giaovu.xuatbaocaodetai') !!}">Đề tài</a>
+                                    <a href="{!! URL::route('giaovu.xuatbaocaodetai') !!}">Thống kê đề tài</a>
                                 </li>
                                 <li>
-                                    <a href="{!! URL::route('giaovu.chart') !!}">Biểu đồ thống kê</a>
+                                    <a href="{!! URL::route('giaovu.baocaogiaovien') !!}">Thống kê giáo viên</a>
                                 </li>
                                 <li>
-                                    <a href="#">Sinh viên</a>
+                                    <a href="{!! URL::route('giaovu.baocaosinhvien') !!}">Thống kê sinh viên</a>
                                 </li>
                             </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="{!! URL::route('giaovu.settime') !!}"><i class="glyphicon glyphicon-time"></i>  Cài đặt thời gian</br>   đăng kí</a>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="{!! URL::route('giaovu.crawlerdata') !!}"><i class="glyphicon glyphicon-time"></i>  Cập nhập thông tin</br> nghiên cứu của giáo viên</a>
                             <!-- /.nav-second-level -->
                         </li>
                         
@@ -156,27 +164,62 @@
     <script src="{{url('public/admin/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js')}}"></script>
 	<!-- myscript -->
 	<script src="{{url('public/admin/dist/js/myscript.js')}}" type="text/javascript"></script>
+
     <script type="text/javascript">
-        $('#gvdepart').change(function(){
-            $.get("{{ URL::route('giaovu.getbomon') }}", { option: $(this).val() }, 
-            function(data) {
-                var model = $('#gvclass');
-                model.empty();
-                $.each(data, function(index, element) {
-                    model.append("<option value='"+ element.value +"'>" + element.name + "</option>");
-                });
-            });
+    $("#changetime").submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            type: "post",
+            url: "{{ URL::route('giaovu.postsettime') }}",
+            data: $("#changetime").serialize(),
+            dataType: "json",
+            success: function(response){
+                if(response.success == 'true'){
+                    window.location.reload();
+                } else {
+                    $("#errorsettime").show();
+                }
+            }
         });
-        $('#svdepart').change(function(){
-            $.get("{{ URL::route('giaovu.getkhoa') }}", { option: $(this).val() }, 
-            function(data) {
-                var model = $('#svacademic');
-                model.empty();
-                $.each(data, function(index, element) {
-                    model.append("<option value='"+ element.value +"'>" + element.name + "</option>");
-                });
-            });
+    });
+
+    $("#sendemailform").submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            type: "post",
+            url: "{{ URL::route('giaovu.sendemailsv') }}",
+            data: $("#sendemailform").serialize(),
+            dataType: "json",
+            success: function(response){
+                if(response.success == 'true'){
+                    alert("gửi email thành công");
+                } else {
+                    $("#errorsendemail").show();
+                }
+            }
         });
+    });
+        // $('#gvdepart').change(function(){
+        //     $.get("", { option: $(this).val() }, 
+        //     function(data) {
+        //         var model = $('#gvclass');
+        //         model.empty();
+        //         $.each(data, function(index, element) {
+        //             model.append("<option value='"+ element.value +"'>" + element.name + "</option>");
+        //         });
+        //     });
+        // });
+
+        // $('#svdepart').change(function(){
+        //     $.get("", { option: $(this).val() }, 
+        //     function(data) {
+        //         var model = $('#svacademic');
+        //         model.empty();
+        //         $.each(data, function(index, element) {
+        //             model.append("<option value='"+ element.value +"'>" + element.name + "</option>");
+        //         });
+        //     });
+        // });
     </script>
 
 </body>

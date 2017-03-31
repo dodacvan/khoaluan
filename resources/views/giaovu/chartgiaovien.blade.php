@@ -7,7 +7,7 @@
         <title>My Charts</title>
          <link href="{{url('public/admin/bower_components/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
         {!! Charts::assets() !!}
-        
+
     </head>
     <body>
         <center>

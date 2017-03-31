@@ -70,6 +70,10 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
+                            <a href="{!! URL::route('giaovien.listlichhen') !!}"><i class="glyphicon glyphicon-bell"></i> Lịch hẹn</a>                        
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
                             <a href="{!! URL::route('giaovien.listsinhvien') !!}"><i class="fa fa-list fa-fw"></i> Danh sách sinh viên hướng dẫn</a>                        
                             <!-- /.nav-second-level -->
                         </li>
@@ -96,12 +100,20 @@
                     </div>
                     <!-- /.col-lg-12 -->
 				<div class="col-lg-12">
+                     @if (Session::has('timeout'))
+                        <div class="alert alert-{!! Session::get('status') !!}">
+                            {!! Session::get('timeout') !!}
+                        </div>
+                    @endif
                     @if (Session::has('flash_message'))
                         <div class="alert alert-success">
                             {!! Session::get('flash_message') !!}
                         </div>
                     @endif
                     <div id="errorMessage" style="display:none;" class=" alert alert-danger"></div>
+                      @if (isset($messageShow))
+                        <div class="alert-warning">{!! $messageShow !!}</div>
+                    @endif
                 </div>
 
 

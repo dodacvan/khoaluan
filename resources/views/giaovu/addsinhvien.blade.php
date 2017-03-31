@@ -2,9 +2,29 @@
 @section('controller','Thêm')
 @section('action','Sinh viên')
 @section('content')
+<form  action="{{ URL::to('SVimport') }}" class="form-horizontal" method="post" enctype="multipart/form-data">
+	<div class="col-lg-12">
+		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+		<div class="form-group">
+			<label>Chọn file</label>
+			<input type="file" name="import_file" />
+		</div>
+		<button class="btn btn-primary">Import File</button>
+	</div>
+</form>
 <form enctype="multipart/form-data" action="" method="POST">
 <div class="col-lg-6" style="padding-bottom:120px">  
 		<input type="hidden" name="_token" value="{!! csrf_token() !!}">
+		<div class="form-group">
+            <label>Mã sinh viên</label>
+            <input class="form-control" name="txtCode" placeholder="Điền mã sinh viên" value="{!! old('txtCode') !!}" />
+        </div>
+		@if($errors->first('txtCode'))
+                <div class="alert alert-danger">
+		{!! $errors->first('txtCode') !!}
+	    </div>
+		@endif
+
         <div class="form-group">
             <label>Tên sinh viên</label>
             <input class="form-control" name="txtName" placeholder="Điền tên sinh viên" value="{!! old('txtName') !!}" />
@@ -44,6 +64,20 @@
 		{!! $errors->first('txtCellphone') !!}
 	    </div>
 		@endif
+ 
+		<button type="submit" class="btn btn-info">Thêm</button>
+        <button type="reset" class="btn btn-default">Thiết lập lại</button>
+</div>
+<div class="col-lg-6" style="padding-bottom:120px">
+        <div class="form-group">
+            <label>Địa chỉ</label>
+            <input class="form-control" name="txtAddress" placeholder="Điền địa chỉ" value="{!! old('txtAddress') !!}"/>
+        </div>
+		@if($errors->first('txtAddress'))
+                <div class="alert alert-danger">
+		{!! $errors->first('txtAddress') !!}
+	    </div>
+		@endif
 
 		<div class="form-group">
             <label>Giới tính</label>
@@ -56,23 +90,10 @@
                 <div class="alert alert-danger">
 		{!! $errors->first('txtSex') !!}
 	    </div>
-		@endif  
-		<button type="submit" class="btn btn-info">Thêm</button>
-        <button type="reset" class="btn btn-default">Thiết lập lại</button>
-</div>
-<div class="col-lg-6" style="padding-bottom:120px">
-				
-        <div class="form-group">
-            <label>Địa chỉ</label>
-            <input class="form-control" name="txtAddress" placeholder="Điền địa chỉ" value="{!! old('txtAddress') !!}"/>
-        </div>
-		@if($errors->first('txtAddress'))
-                <div class="alert alert-danger">
-		{!! $errors->first('txtAddress') !!}
-	    </div>
 		@endif
 
-		<div class="form-group">
+
+		<!-- <div class="form-group">
             <label>Khoa</label>
             <select class="form-control" name="txtDepart" id="svdepart">
 				<option value="0">CNTT</option>
@@ -85,15 +106,15 @@
                 <div class="alert alert-danger">
 		{!! $errors->first('txtDepart') !!}
 	    </div>
-		@endif
+		@endif -->
 
 		<div class="form-group">
             <label>Ngành</label>
             <select class="form-control" name="txtAcademic" id="svacademic">
-					<option value="0">CNTT</option>
-					<option value="1">Khoa học máy tính</option>
-					<option value="2">Hệ thống thông tin</option>
-					<option value="3">Truyền thông và mạng máy tính</option>
+					<option value="CNTT">CNTT</option>
+					<option value="Khoa học máy tính">Khoa học máy tính</option>
+					<option value="Hệ thống thông tin">Hệ thống thông tin</option>
+					<option value="Truyền thông và mạng máy tính">Truyền thông và mạng máy tính</option>
 			 </select>
         </div>
 		@if($errors->first('txtAcademic'))

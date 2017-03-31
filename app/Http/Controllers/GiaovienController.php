@@ -4,10 +4,13 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\GiaovienRequest;
+use App\Http\Requests\EditLichhen;
+use App\Http\Requests\Lichhen as RequestLichhen;
 use App\Detai;
 use App\Giaovien;
 use App\Sinhvien;
 use App\Yeucau;
+use App\Lichhen;
 use App\Huongnghiencuu;
 use App\User;
 use Response;
@@ -59,10 +62,6 @@ class GiaovienController extends Controller {
 			
 		  if( $validation->fails())
 		  {
-		    // return json_encode([
-		    //         'errors' => $validation->errors()->getMessages(),
-		    //         'success' => 'false'
-		    //      ], 400);
 		    $response = array(
 	            'success' => 'false'
 	        );
@@ -156,8 +155,9 @@ class GiaovienController extends Controller {
 		// 	            $join->on('detais.sinhvien_id', '=', 'sinhviens.sinhvien_id');})
 		// 			->select('detais.*','sinhviens.*','sinhviens.id as idsinhvien','detais.ten as tendt')->get();
 		$giaovien_id = $this->getcurrentgiaovien();
+		$messageShow = $this->checkYc();
 		$data =  DB::table('yeucaus')->join('sinhviens','yeucaus.sinhvien_id','=','sinhviens.sinhvien_id')->select('yeucaus.*','sinhviens.*','yeucaus.id as yeucauid')->whereIn('yeucaus.status', [0, 2, 4, 5, 7])->where('yeucaus.giaovien_id','=',$giaovien_id)->get(); 
-		return view('giaovien.yeucau',compact('data'));
+		return view('giaovien.yeucau',compact('data','messageShow'));
 	}
 
 	public function postlistyeucau(Request $request){
@@ -170,105 +170,225 @@ class GiaovienController extends Controller {
 		}
 		$sinhvien = Sinhvien::where('sinhvien_id',$yeucau->sinhvien_id)->get()->first();
 		$giaovien = Giaovien::where('id',$yeucau->giaovien_id)->get()->first();
-		if($request->action == 'access'){
-			$check = $this->checksosinhvien($giaovien['hocvi'],$giaovien['sosinhvien']);
-			if($check){
-
-				switch ($yeucau->status) {
-					case 0:
-						return response()->json([
-						    'success' => 'false',
-						    'message' => 'Đã nhận đủ sinh viên không thể nhận thêm'
-						]);
-						break;
-					case 2:
-						$yeucau->status = 1;
-						$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
-						$yeucau->save();
-						break;
-					default:
-						$yeucau->delete();
-						$sinhvien->magiaovien = 0;
-						$giaovien->sosinhvien = ($giaovien->sosinhvien) - 1;
-						break;
+		if($sinhvien['nganh'] == "Khoa học máy tính"){
+			if($request->action == 'access'){
+				$message = "";
+				$check = $this->checksosinhvien($sinhvien['nganh'],$giaovien['hocvi'],$giaovien['sosinhvien'],$giaovien['sosinhvienCA'],$message);
+				if($check){
+					switch ($yeucau->status) {
+						case 0:
+							return response()->json([
+							    'success' => 'false',
+							    'message' => $message
+							]);
+							break;
+						case 2:
+							$yeucau->status = 1;
+							$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+							$yeucau->save();
+							break;
+						default:
+							$yeucau->delete();
+							$sinhvien->magiaovien = 0;
+							$giaovien->sosinhvien = ($giaovien->sosinhvien) - 1;
+							$giaovien->sosinhvienCA = ($giaovien->sosinhvienCA) -1;
+							break;
+					}
+				}else{
+					switch ($yeucau->status) {
+						case 0:
+							$yeucau->status = 1;
+							$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+							$sinhvien->magiaovien = $yeucau->giaovien_id;
+							$giaovien->sosinhvien = ++$giaovien->sosinhvien;
+							$giaovien->sosinhvienCA = ++$giaovien->sosinhvienCA;
+							$yeucau->save();
+							break;
+						case 2:
+							$yeucau->status = 1;
+							$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+							$yeucau->save();
+							break;
+						default:
+							$yeucau->delete();
+							$sinhvien->magiaovien = 0;
+							$giaovien->sosinhvien = ($giaovien->sosinhvien) - 1;
+							$giaovien->sosinhvienCA = ($giaovien->sosinhvienCA) -1;
+							break;
+					}
 				}
 			}else{
 				switch ($yeucau->status) {
 					case 0:
-						$yeucau->status = 1;
-						$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
-						$sinhvien->magiaovien = $yeucau->giaovien_id;
-						$giaovien->sosinhvien = ++$giaovien->sosinhvien;
+						$yeucau->status = 3;
+						$yeucau->message = "Đề tài không được giáo viên chấp nhận";
 						$yeucau->save();
 						break;
 					case 2:
+						$yeucau->status = 6;
+						$yeucau->message = "Thay đổi đề tài không được chấp nhận yêu cầu chỉnh sửa lại";
+						$yeucau->save();
+						break;
+					case 4:
 						$yeucau->status = 1;
-						$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+						$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận";
+						$yeucau->save();
+						break;
+					case 5:
+						$yeucau->status = 2;
+						$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận";
 						$yeucau->save();
 						break;
 					default:
-						$yeucau->delete();
-						$sinhvien->magiaovien = 0;
-						$giaovien->sosinhvien = ($giaovien->sosinhvien) - 1;
+						$yeucau->status = 6;
+						$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận thay đổi lại đề tài mới để giáo viên phê duyệt";
+						$yeucau->save();
 						break;
 				}
 			}
+			$sinhvien->save();
+			$giaovien->save();
+			return response()->json([
+			    'success' => 'true'
+			]);
 		}else{
-			switch ($yeucau->status) {
-				case 0:
-					$yeucau->status = 3;
-					$yeucau->message = "Đề tài không được giáo viên chấp nhận";
-					$yeucau->save();
-					break;
-				case 2:
-					$yeucau->status = 6;
-					$yeucau->message = "Thay đổi đề tài không được chấp nhận yêu cầu chỉnh sửa lại";
-					$yeucau->save();
-					break;
-				case 4:
-					$yeucau->status = 1;
-					$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận";
-					$yeucau->save();
-					break;
-				case 5:
-					$yeucau->status = 2;
-					$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận";
-					$yeucau->save();
-					break;
-				default:
-					$yeucau->status = 6;
-					$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận thay đổi lại đề tài mới để giáo viên phê duyệt";
-					$yeucau->save();
-					break;
+			if($request->action == 'access'){
+				$message = "";
+				$check = $this->checksosinhvien($sinhvien['nganh'],$giaovien['hocvi'],$giaovien['sosinhvien'],$giaovien['sosinhvienCA'],$message);
+				if($check){
+					switch ($yeucau->status) {
+						case 0:
+							return response()->json([
+							    'success' => 'false',
+							    'message' => $message
+							]);
+							break;
+						case 2:
+							$yeucau->status = 1;
+							$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+							$yeucau->save();
+							break;
+						default:
+							$yeucau->delete();
+							$sinhvien->magiaovien = 0;
+							$giaovien->sosinhvien = ($giaovien->sosinhvien) - 1;
+							break;
+					}
+				}else{
+					switch ($yeucau->status) {
+						case 0:
+							$yeucau->status = 1;
+							$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+							$sinhvien->magiaovien = $yeucau->giaovien_id;
+							$giaovien->sosinhvien = ++$giaovien->sosinhvien;
+							$yeucau->save();
+							break;
+						case 2:
+							$yeucau->status = 1;
+							$yeucau->message = "Đề tài đã được giáo viên chấp nhận";
+							$yeucau->save();
+							break;
+						default:
+							$yeucau->delete();
+							$sinhvien->magiaovien = 0;
+							$giaovien->sosinhvien = ($giaovien->sosinhvien) - 1;
+							break;
+					}
+				}
+			}else{
+				switch ($yeucau->status) {
+					case 0:
+						$yeucau->status = 3;
+						$yeucau->message = "Đề tài không được giáo viên chấp nhận";
+						$yeucau->save();
+						break;
+					case 2:
+						$yeucau->status = 6;
+						$yeucau->message = "Thay đổi đề tài không được chấp nhận yêu cầu chỉnh sửa lại";
+						$yeucau->save();
+						break;
+					case 4:
+						$yeucau->status = 1;
+						$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận";
+						$yeucau->save();
+						break;
+					case 5:
+						$yeucau->status = 2;
+						$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận";
+						$yeucau->save();
+						break;
+					default:
+						$yeucau->status = 6;
+						$yeucau->message = "Yêu cầu hủy đăng kí không được chấp nhận thay đổi lại đề tài mới để giáo viên phê duyệt";
+						$yeucau->save();
+						break;
+				}
 			}
+			$sinhvien->save();
+			$giaovien->save();
+			return response()->json([
+			    'success' => 'true'
+			]);
 		}
-		
-		$sinhvien->save();
-		$giaovien->save();
-		return response()->json([
-		    'success' => 'true'
-		]);
 	}
 
-	public function checksosinhvien($value,$sosinhvien){
+	public function checksosinhvien($nganh,$value,$sosinhvien,$sosinhvienCA,&$message){
+		$numberCA =0;
 		switch ($value) {
-            case 0:
+            case "":
                 $number = 0;
                 break;
-            case 1:
+            case "CN":
                 $number = 0;
                 break;
-            case 2:
-                $number = 5;
+            case "Ths":
+                $number = 3;
                 break;
             default:
-                $number = 7;
+            	$numberCA =3;
+                $number = 5;
                 break;
         }
+        if($nganh == "Khoa học máy tính"){
+	        if($sosinhvienCA >= $numberCA){
+	        	$message = "Không thể nhận thêm sinh viên CA";
+	        	return true;
+	        }
+        }
         if($sosinhvien >= $number){
+        	$message ="Đã nhận đủ sinh viên không thể nhận thêm";
         	return true;
         }
         return false;
+	}
+
+	public function checkYc(){
+		$giaovien_id = $this->getcurrentgiaovien();
+		$giaovien = Giaovien::find($giaovien_id);
+		$numberCA =0;
+		$messageShow = "";
+		switch ($giaovien->hocvi) {
+            case "":
+                $number = 0;
+                break;
+            case "CN":
+                $number = 0;
+                break;
+            case "Ths":
+                $number = 3;
+                break;
+            default:
+            	$numberCA =3;
+                $number = 5;
+                break;
+        }
+        if($numberCA && $giaovien->sosinhvienCA >= $numberCA){
+        	$messageShow = "Đã nhận đủ sinh vien CA";
+        }
+        if($giaovien->sosinhvien >= $number){
+        	$messageShow = "Đã nhận đủ sinh viên";
+        }
+        return $messageShow;
 	}
 
 	public function getinfosinhvien($id){
@@ -323,5 +443,56 @@ class GiaovienController extends Controller {
 		$giaovien->save();
 		$user->save();
 		return redirect()->route('giaovien.info')->with(['flash_message'=>'Sửa thông tin thành công']);
+	}
+
+	public function getlistlichhen(){
+		$id = $this->getcurrentgiaovien();
+		$data = DB::table('sinhviens')->join('lichhens','sinhviens.sinhvien_id','=','lichhens.sinhvien_id')->select('sinhviens.ten','sinhviens.id as svid','lichhens.id as id','lichhens.*')->where('lichhens.giaovien_id',$id)->get();
+		return view('giaovien.listlichhen',compact('data'));
+	}
+
+	public function geteditlichhen($id){
+		$data = Lichhen::find($id);
+		
+		if(!empty($data)){
+			$sinhvien = Sinhvien::where('sinhvien_id',$data['sinhvien_id'])->get()->first();
+		}
+		return view('giaovien.editlichhen',compact('data','sinhvien'));
+	}
+
+	public function posteditlichhen(EditLichhen $request)
+	{
+		$lichhen = Lichhen::find($request->id);
+		$lichhen->diadiem = $request->place;
+		$lichhen->tieude = $request->title;
+		$lichhen->type = 2;
+		if($request->has('time')){
+			$lichhen->thoigian = $request->time;
+		}
+		$lichhen->save();
+		return redirect()->route('giaovien.listlichhen')->with(['flash_message'=>'Sửa thông tin thành công']);
+	}
+
+	public function addlichhen($id){
+		$data = Sinhvien::select('*')->where('id',$id)->get()->first();
+		return view('giaovien.addlichhen',compact('data'));
+	}
+
+	public function postaddlichhen(RequestLichhen $request){
+		$lichhen = new Lichhen();
+		$lichhen->sinhvien_id = $request->sinhvien_id;
+		$lichhen->giaovien_id = $this->getcurrentgiaovien();
+		$lichhen->tieude = $request->title;
+		$lichhen->thoigian = $request->time;
+		$lichhen->diadiem = $request->place;
+		$lichhen->type = $request->type;
+		$lichhen->status = 1;
+		$lichhen->save();
+		return redirect()->route('giaovien.listlichhen')->with(['flash_message'=>'Đặt lịch hẹn thành công']);
+	}
+
+	public function deletelichhen($id){
+		User::destroy($id);
+		return redirect()->route('giaovien.listlichhen')->with(['flash_message'=>'Xóa lịch hẹn thành công']);
 	}
 }

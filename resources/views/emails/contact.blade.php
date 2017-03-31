@@ -1,0 +1,1 @@
+Thông tin từ hệ thống đăng kí khóa luân {{ $data }}

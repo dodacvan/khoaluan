@@ -10,7 +10,8 @@
             <th>Đề tài</th>
             <th>Lớp</th>
             <th>Email</th>
-            <th>Khoa</th>
+            <th>Ngành</th>
+            <th>Hẹn gặp</th>
         </tr>
     </thead>
     <tbody>
@@ -31,21 +32,8 @@
                     ?>
                     <td>{!! $item->lop !!}</td>
                     <td>{!! $item->email !!}</td>
-                    <?php
-                        switch ($item->khoa) {
-                            case 0:
-                               echo  '<td>CNTT</td>';
-                                break;
-                            case 1:
-                                echo "<td>Vật lý kĩ thuật</td>";
-                                break;
-                            case 2:
-                                echo "<td>Cơ kĩ thuật</td>";
-                                break;
-                            default:
-                                echo "<td>Truyền thông và mạng máy tính</td>";
-                        }
-                    ?>
+                    <td>{!! $item->nganh !!}</td>
+                    <td><a href="{!! URL::route('giaovien.addlichhen',$item->svid) !!}"><button class="btn btn-info">Hẹn gặp</button></a></td>
                 </tr>
             @endforeach
     </tbody>

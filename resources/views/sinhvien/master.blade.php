@@ -76,6 +76,10 @@
                             <a href="{!! URL::route('sinhvien.listdetai') !!}"><i class="fa fa-book fa-fw"></i> Đề tài tham khảo</a>
                             <!-- /.nav-second-level -->
                         </li>
+                        <li>
+                            <a href="{!! URL::route('sinhvien.listlichhen') !!}"><i class="glyphicon glyphicon-bell"></i> Lịch hẹn</a>
+                            <!-- /.nav-second-level -->
+                        </li>
                        <li>
                             <a href="{!! URL::route('sinhvien.changeinfo') !!}"><i class="fa fa-pencil-square-o fa-fw"></i> Thay đổi thông tin cá nhân</a>
                             <!-- /.nav-second-level -->
@@ -99,12 +103,20 @@
                     </div>
                     <!-- /.col-lg-12 -->
 				<div class="col-lg-12">
+                    @if (Session::has('timeout'))
+                        <div class="alert alert-danger">
+                            {!! Session::get('timeout') !!}
+                        </div>
+                    @endif
                     @if (Session::has('flash_message'))
                         <div class="alert alert-{!! Session::get('status') !!}">
                             {!! Session::get('flash_message') !!}
                         </div>
                     @endif
                     <div id="errorMessage" style="display:none;" class=" alert alert-danger"></div>
+                    @if (isset($messageShow))
+                        <div class="alert-warning">{!! $messageShow !!}</div>
+                    @endif
                 </div>
 
 
@@ -157,8 +169,11 @@
                         $("#deletedetaisv").show().delay(1000).slideUp();
                         window.setTimeout(function(){location.reload()},3000)
                     }
-                    else
+                    else if(response.success == 'false'){
                         $("#errordeletedetaisv").show().delay(1000).slideUp();
+                    } else {
+                        alert('hết hạn đăng kí');
+                    }
                 },
                 error: function (request, status, error) {
                     alert(request.responseText);            

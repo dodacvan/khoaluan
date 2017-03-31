@@ -145,7 +145,8 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
-		'ConsoleTVs\Charts\ChartsServiceProvider'
+		'ConsoleTVs\Charts\ChartsServiceProvider',
+		'Weidner\Goutte\GoutteServiceProvider'
 	],
 
 	/*
@@ -195,6 +196,7 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 		'Excel' => 'Maatwebsite\Excel\Facades\Excel',
 		'Charts' => 'ConsoleTVs\Charts\Charts',
+		'Goutte' => 'Weidner\Goutte\GoutteFacade',
 	],
 
 ];

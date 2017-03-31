@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use App\Sinhvien;
+use Mail;
 
 abstract class Controller extends BaseController {
 
@@ -45,4 +47,34 @@ abstract class Controller extends BaseController {
 	   return $password;
 	}
 
+	public function checkshow($giaovien){
+		switch ($giaovien['hocvi']) {
+            case "":
+                $number = 0;
+                break;
+            case "CN":
+                $number = 0;
+                break;
+            case "Ths":
+                $number = 3;
+                break;
+            default:
+                $number = 5;
+                break;
+        }
+        $check = 'true';
+        if($number <= $giaovien['sosinhvien']){
+        	$check = 'false';
+        }
+        return $check;
+	}
+
+	public function sendEmail($data, $title){
+		$dataEmail = array('data'=>$data);
+		Mail::send('emails.contact',$dataEmail, function($msg) use($title){
+			$msg->from('dodacvan1995@gmail.com','van');
+			$msg->to('dodacvan1995@gmail.com','nguoi dung moi')->subject($title);
+
+		});
+	}
 }

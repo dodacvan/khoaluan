@@ -2,6 +2,30 @@
 @section('controller','Danh sách')
 @section('action','Giáo viên')
 @section('content')
+<a href="{{ URL::route('giaovu.excelgiaovien') }}"><button class="btn btn-success" style="margin-bottom: 10px;">Xuất ra excel</button></a>
+<a href="{{ URL::route('giaovu.chartgiaovien') }}"><button class="btn btn-success" style="margin-bottom: 10px;">Biểu đồ</button></a>
+<div class="container">
+<form action="" method="get" class="form-inline">
+    <div class="form-group" style="float: left">
+        <label>Bộ môn</label>
+        <select name="bomon" class="custom-select">
+            <option value="">Tất cả</option>
+           @foreach ($bomon as $item)
+                <option value="{!! $item !!}" {!! ($item == $bomonselect)?"selected":"" !!}>{!! $item !!}</option>
+           @endforeach
+        </select>  
+    </div>
+    <div class="type" style="float: left; margin-left: 10px">
+        <label>Trạng thái</label>
+        <select name="type" class="custom-select">
+            <option value="">Tất cả</option>
+            <option value="false" {!! ($typeselect == "false")?"selected":"" !!}>Đã nhận đủ</option>
+            <option value="true" {!! ($typeselect == "true")?"selected":"" !!}>Chưa nhận đủ</option>
+        </select>
+    </div>
+    <button type="submit" style="float: left; margin-left: 10px; margin-top: -10px;" class="btn btn-info">Duyet</button>
+</form>
+</div>
 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
     <thead>
         <tr align="center">

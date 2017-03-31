@@ -23,6 +23,7 @@ class SinhvienRequest extends Request {
 	{
 		return [
 			'txtName'=>'required',
+			'txtCode'=>'required|unique:sinhviens,masinhvien',
 			'txtemail'=>'required|unique:sinhviens,email',
 			'txtBirth'=>'required',
 			'txtCellphone'=>'required|numeric',
@@ -35,6 +36,8 @@ class SinhvienRequest extends Request {
 			'txtName.required'=>'Điền tên sinh viên',
 			'txtemail.txtemail'=>'Điền email',
 			'txtemail.unique'=>'Email bị trùng',
+			'txtCode.txtemail'=>'Điền mã sinh viên',
+			'txtCode.unique'=>'Mã sinh viên bị trùng',
 			'txtBirth.required'=>'Điền ngày sinh',
 			'txtCellphone.required'=>'Điền số điện thoại',
 			'txtCellphone.numeric'=>'Điền đúng định dạng số điện thoại',

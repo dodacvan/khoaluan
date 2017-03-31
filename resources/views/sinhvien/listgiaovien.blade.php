@@ -9,36 +9,44 @@
             <th>Tên</th>
             <th>Điện thoại</th>
             <th>Email</th>
-            <th>Khoa</th>
+            <th>Bộ môn</th>
             <th>Số sinh viên đã nhận</th>
+            <th>Hẹn gặp</th>
             <th>Đăng kí</th>
         </tr>
     </thead>
     <tbody>
     <?php $stt=0; ?>
-                    @foreach($data as $item)
-                            <tr class="odd gradeX" align="center">
+                    @foreach($newdata as $item)
+                        <?php
+                            switch ($item['hocvi']) {
+                                case "":
+                                    $number = 0;
+                                    break;
+                                case "CN":
+                                    $number = 0;
+                                    break;
+                                case "Ths":
+                                    $number = 3;
+                                    break;
+                                default:
+                                    $number = 5;
+                                    break;
+                            }
+                        ?>
+                        @if($item['show'])
+                            <tr class="odd gradeX" align="center" style="background:#84f19a">
+                        @else
+                            <tr class="odd gradeX" align="center" style="background:#ea6868">
+                        @endif
                                 <td>{!! ++$stt; !!}</td>
-                                <td><a href="{!! URL::route('sinhven.infogiaovien', $item['id']) !!}">{!! $item['tengiaovien'] !!}</a></td>
+                                <td><a href="{!! URL::route('sinhvien.infogiaovien', $item['id']) !!}">{!! $item['tengiaovien'] !!}</a></td>
                                 <td>{!! $item['sdt'] !!}</td>
                                 <td>{!! $item['email'] !!}</td>
-                                   <?php
-                                        switch ($item['khoa']) {
-                                            case 0:
-                                               echo  '<td>CNTT</td>';
-                                                break;
-                                            case 1:
-                                                echo "<td>Vật lý kĩ thuật và công nghệ nano</td>";
-                                                break;
-                                            case 2:
-                                                echo "<td>Điện tử viễn thông</td>";
-                                                break;
-                                            default:
-                                                echo "<td>Cơ học kĩ thuật và tự động hóa</td>";
-                                        }
-                                    ?>
-                             <td class="center">{!! $item['sosinhvien'] !!}</td>
-                                <td class="center"><a href="{!! URL::route('sinhvien.adddetai', $item['id']) !!}"><button type="button" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-star fa-fw"></i>Đăng kí</button></a></td>
+                                <td>{!! $item['bomon'] !!}</td> 
+                                <td class="center">{!! $item['sosinhvien'].'/'.$number !!}</td>
+                                <td><a href="{!! URL::route('sinhvien.addlichhen',$item['id']) !!}"><button class="btn btn-info">Hẹn gặp</button></a></td>
+                                <td class="center"><button type="button" class="btn btn-info btn-sm" <?php if(!$item['show']) echo "disabled style='background:#ea6868'"; ?>><i class="glyphicon glyphicon-star fa-fw"><a href="{!! URL::route('sinhvien.adddetai', $item['id']) !!}"></i>Đăng kí</a></button></td>
                             </tr>
                         @endforeach
     </tbody>
