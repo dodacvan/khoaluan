@@ -39,7 +39,7 @@ class SinhvienController extends Controller {
 	}
 
 	public function getlistgiaovien(){
-		$data = Giaovien::select('id','tengiaovien','sdt','email','bomon','sosinhvien','hocvi', 'sosinhvienCA')->orderBy('id','DESC')->get()->toArray();
+		$data = Giaovien::select('id','tengiaovien','sdt','email','bomon','sosinhvien','hocvi','hocham','sosinhvienCA')->orderBy('id','DESC')->get()->toArray();
 		$messageShow = "";
 		if($this->checkYc()){
 			$messageShow = "Bạn đã tạo một đăng kí, xóa đăng kí cũ để tạo đăng kí mới";
@@ -66,16 +66,19 @@ class SinhvienController extends Controller {
                 $number = 0;
                 break;
             case "Ths":
-                $number = 3;
+                $number = 4;
                 break;
             default:
             	$numberCA =3;
                 $number = 5;
                 break;
         }
+       if($giaovien['hocham'] == 'GS' || $giaovien['hocham'] == 'PGS'){
+        	$number = 6;
+        }
         $check = true;
         if($this->checkSvCA()){
-	        if($numberCA <= $giaovien['sosinhvienCA'] && $numberCA){
+	        if($numberCA <= $giaovien['sosinhvienCA']){
 	        	$check = false;
 	        }
         }
@@ -102,6 +105,9 @@ class SinhvienController extends Controller {
             	$numberCA =3;
                 $number = 5;
                 break;
+        }
+        if($giaovien['hocham'] == 'GS' || $giaovien['hocham'] == 'PGS'){
+        	$number = 6;
         }
         $check = true;
         if($this->checkSvCA()){

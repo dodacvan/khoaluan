@@ -77,6 +77,10 @@
                             <a href="{!! URL::route('giaovien.listsinhvien') !!}"><i class="fa fa-list fa-fw"></i> Danh sách sinh viên hướng dẫn</a>                        
                             <!-- /.nav-second-level -->
                         </li>
+                        <li>
+                            <a href="{!! URL::route('admin.listpost') !!}"><i class="fa fa-star"></i> Thông báo</a>
+                            <!-- /.nav-second-level -->
+                        </li>
                        <li>
                             <a href="{!! URL::route('giaovien.changeinfo') !!}"><i class="fa fa-pencil-square-o fa-fw"></i> Chỉnh sửa thông tin cá nhân</a>
                             <!-- /.nav-second-level -->

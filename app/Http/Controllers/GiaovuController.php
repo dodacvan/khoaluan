@@ -145,82 +145,6 @@ class GiaovuController extends Controller {
 		$user->save();
 
 	}
-	// public function getbomon(Request $request){
-	// 	switch ($request->option) {
-	// 		case 0:
-	// 			$response = array(
-	// 	            'công nghệ phần mềm' => array('name'=>'Công nghệ phần mềm','value'=>1),
-	// 	            'hệ thống thông tin'=>array('name'=>'Hệ thống thông tin','value'=>2),
-	// 	            'khoa học máy tính'=>array('name'=>'Khoa học máy tính','value'=>3),
-	// 	            'mạng và truyền thông máy tính'=>array('name'=>'Mạng và truyền thông máy tính','value'=>4),
-	// 	            'các pp toán trong cn'=>array('name'=>'Các PP toán trong CN','value'=>5),
-	// 	            'ptn công nghệ tri thức'=>array('name'=>'PTN Công nghệ tri thức','value'=>6),
-	// 	            'ptn hệ thống nhúng'=>array('name'=>'PTN hệ thống nhúng','value'=>7),
-	// 	            'ptn tương tác người máy'=>array('name'=>'PTN Tương tác người máy','value'=>8)
-	// 	        );
-	// 			break;
-	// 		case 1:
-	// 			$response = array(
-	// 	            'công nghệ nano sinh học' => array('name'=>'Công nghệ nano sinh học','value'=>9),
-	// 	            'vật liệu và linh kiện bán dẫn nano'=>array('name'=>'Vật liệu và linh kiện bán dẫn nano','value'=>10),
-	// 	            'vật liệu và linh kiện từ tính nano' => array('name'=>'Vật liệu và linh kiện từ tính nano','value'=>11),
-	// 	            'quang tử' => array('name'=>'Quang tử','value'=>12)
-	// 	        );
-	// 			break;
-	// 		case 2:
-	// 			$response = array(
-	// 	            'điện tử và kĩ thuật máy tính' => array('name'=>'Điện tử và kĩ thuật máy tính','value'=>13),
-	// 	            'hệ thống viễn thông'=>array('name'=>'Hệ thống viễn thông','value'=>14),
-	// 	            'thông tin vô tuyến'=>array('name'=>'Thông tin vô tuyến','value'=>15),
-	// 	            'vi cơ điện tử và vi hệ thống'=>array('name'=>'Vi cơ điện tử và vi hệ thống','value'=>16),
-	// 	            'ptn tín hiệu và hệ thống'=>array('name'=>'PTN Tín hiệu và hệ thống','value'=>17),
-	// 	            'Pth điện tử viễn thông'=>array('name'=>'PTH Điện tử viễn thông','value'=>18)
-	// 	        );
-	// 			break;
-			
-	// 		default:
-	// 			$response = array(
-	// 	            'cơ điện tử' => array('name'=>'Cơ điện tử','value'=>19),
-	// 	            'công nghệ hàng không vũ trụ'=>array('name'=>'Công nghệ hàng không vũ trụ','value'=>20),
-	// 	            'thủy khí công nghiệp và môi trường'=>array('name'=>'Thủy khí công nghiệp và môi trường','value'=>21),
-	// 	            'công nghệ biển và môi trường'=>array('name'=>'Công nghệ biển và môi trường','value'=>22)
-	// 	        );
-	// 			break;
-	// 	}
-		
-	// 	return Response::json($response);
-	// }
-
-	// public function getkhoa(Request $request){
-	// 	switch ($request->option) {
-	// 		case 0:
-	// 			$response = array(
-	// 	            'công nghệ thông tin' => array('name'=>'CNTT','value'=>0),
-	// 	            'khoa học máy tính'=>array('name'=>'Khoa học máy tính','value'=>1),
-	// 	            'hệ thống thông tin'=>array('name'=>'Hệ thống thông tin','value'=>2),
-	// 	            'truyền thông và mạng máy tính'=>array('name'=>'Truyền thông và mạng máy tính','value'=>3)
-	// 	        );
-	// 			break;
-	// 		case 2:
-	// 			$response = array(
-	// 	            'vật lý kỹ thuật' => array('name'=>'Vật lý kỹ thuật','value'=>4),
-	// 	            'kỹ thuật năng lượng'=>array('name'=>'Kỹ thuật năng lượng','value'=>5)		            
-	// 	        );
-	// 			break;
-	// 		case 3:
-	// 			$response = array(
-	// 	            'công nghệ kỹ thuật điện tử viễn thông' => array('name'=>'Công nghệ kỹ thuật điện tử viễn thông','value'=>6)
-	// 	        );
-	// 			break;
-	// 		default:
-	// 			$response = array(
-	// 	            'cơ kỹ thuật' => array('name'=>'Cơ kỹ thuật','value'=>7),
-	// 	            'công nghệ kỹ thuật cơ điện tử'=>array('name'=>'Công nghệ kỹ thuật cơ điện tử','value'=>8)
-	// 	        );
-	// 			break;
-	// 	}
-	// 	return Response::json($response);
-	// }
 
 	public function baocaodetai(){
 		$data = $this->getdatabaocao();
@@ -287,7 +211,7 @@ class GiaovuController extends Controller {
 
     public function getDataBaocaoGV($request)
     {
-    	$value = Giaovien::select('id','tengiaovien','sdt','email','hocvi','bomon','sosinhvien');
+    	$value = Giaovien::select('id','tengiaovien','sdt','email','hocvi','bomon','sosinhvien','hocham');
     	if($request->bomon){
     		$value = $value->where('bomon','=', $request->bomon);
     	}
@@ -318,7 +242,7 @@ class GiaovuController extends Controller {
 	}
 
 	public function getchartgiaovien(){
-		$value = Giaovien::select('id','hocvi','sosinhvien')->get()->toArray();
+		$value = Giaovien::select('id','hocvi','sosinhvien','hocham')->get()->toArray();
     	$data = array();
 		foreach ($value as $items) {
 			$check = $this->checkshow($items);
@@ -434,25 +358,23 @@ class GiaovuController extends Controller {
 	    $crawler->filter('tbody tr')->each(function ($node) {
 	      	$ten = $node->filter('a')->text();
 	      	$nghiencuu = $node->filter('td:last-child')->text();
+	      	$arrayhnc = explode(',',$nghiencuu);
 	    	$listgv = Giaovien::where('tengiaovien','=',$ten)->get()->toArray();
 	    	if(!empty($listgv)){
 	    		foreach ($listgv as $gv) {
 		    		$check = Huongnghiencuu::where('giaovien_id',$gv['id'])->where('ten',$nghiencuu)->get()->toArray();
 		    		if(empty($check)){
-		    			$hnc = new Huongnghiencuu();
-		    			$hnc->giaovien_id = $gv['id'];
-		    			$hnc->ten = $nghiencuu;
-		    			$hnc->save();
+		    			foreach ($arrayhnc as $value) {
+		    				$hnc = new Huongnghiencuu();
+			    			$hnc->giaovien_id = $gv['id'];
+			    			$hnc->ten = $value;
+			    			$hnc->save();
+		    			}	
 		    		}
 		    	}
 	    	}
 	    });
 	    return redirect()->back()->with(['flash_message'=>'Cập nhập thông tin thành công']);
-	}
-
-	public function getaddPost()
-	{
-		return view('giaovu.addpost');
 	}
 
 }

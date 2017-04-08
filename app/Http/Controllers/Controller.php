@@ -62,6 +62,9 @@ abstract class Controller extends BaseController {
                 $number = 5;
                 break;
         }
+        if($giaovien['hocham'] == 'GS' || $giaovien['hocham'] == 'PGS'){
+        	$number = 6;
+        }
         $check = 'true';
         if($number <= $giaovien['sosinhvien']){
         	$check = 'false';

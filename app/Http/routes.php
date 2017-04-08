@@ -28,6 +28,10 @@ Route::post('importExcel', 'DetaiController@importExcel');
 Route::post('SVimport', 'DetaiController@SVimport');
 
 Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
+
+	Route::get('listpost',['as'=>'admin.listpost','uses'=>'PostController@listPost']);
+	Route::get('infopost',['as'=>'admin.infopost','uses'=>'PostController@infoPost']);
+
 	Route::group(['prefix'=>'giaovu','middleware'=>'checkadmin'],function(){
 		Route::get('addgiaovien',['as'=>'giaovu.addgiaovien','uses'=>'GiaovuController@getaddgiaovien']);
 		Route::post('addgiaovien',['as'=>'giaovu.addgiaovienpost','uses'=>'GiaovuController@postaddgiaovien']);
@@ -52,8 +56,13 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 		Route::get('crawlerdata',['as'=>'giaovu.crawlerdata','uses'=>'GiaovuController@getCrawler']);
 		Route::post('sendemailsv',['as'=>'giaovu.sendemailsv','uses'=>'GiaovuController@sendEmailSV']);
 
-		Route::get('addpost',['as'=>'giaovu.getaddpost','uses'=>'GiaovuController@getaddPost']);
-		Route::post('addpost',['as'=>'giaovu.postaddpost','uses'=>'GiaovuController@postaddPost']);
+		Route::get('addpost',['as'=>'giaovu.getaddpost','uses'=>'PostController@getaddPost']);
+		Route::post('addpost',['as'=>'giaovu.postaddpost','uses'=>'PostController@postaddPost']);
+		Route::get('listpost',['as'=>'giaovu.listpost','uses'=>'PostController@listPost']);
+		Route::get('infopost',['as'=>'giaovu.infopost','uses'=>'PostController@infoPost']);
+		Route::get('editpost',['as'=>'giaovu.geteditpost','uses'=>'PostController@geteditPost']);
+		Route::post('editpost',['as'=>'giaovu.posteditpost','uses'=>'PostController@posteditPost']);
+		Route::get('deletepost',['as'=>'giaovu.deletepost','uses'=>'PostController@deletePost']);
 
 	});
 
@@ -78,6 +87,8 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 		Route::get('addlichhen/{id}',['as'=>'giaovien.addlichhen','uses'=>'GiaovienController@addlichhen']);
 		Route::post('addlichhen/{id}',['as'=>'giaovien.postaddlichhen','uses'=>'GiaovienController@postaddlichhen']);
 		Route::get('deletelichhen/{id}',['as'=>'giaovien.deletelichhen','uses'=>'GiaovienController@deletelichhen']);
+
+		
 	});
   
 	Route::group(['prefix'=>'sinhvien','middleware'=>'checksinhvien'],function(){

@@ -17,14 +17,14 @@ function xacnhanxoa(msg){
     return false;
 }
 
-function nameofhnc($value,$id){
-    $("#edittxthnc").val($value);
-    $("#idhnc").val($id);
+function nameofhnc(value,id){
+    $("#edittxthnc").val(value);
+    $("#idhnc").val(id);
 }
 
-function nameofdetai($value,$id){
-    $("#edittxtdetai").val($value);
-    $("#iddetai").val($id);
+function nameofdetai(value,id){
+    $("#edittxtdetai").val(value);
+    $("#iddetai").val(id);
 }
 
 // them huong nghien cuu cua giaovien
@@ -32,7 +32,7 @@ $('#addhuongnghiencuu').on( 'submit', function(e) {
   e.preventDefault();  
   $.ajax({
         type: "POST",
-        url: '/dangky/admin/giaovien/addhnc',
+        url: '/admin/giaovien/addhnc',
         //data: {"txthnc":txthnc, "_token":_token,"giaovien_id":giaovien_id},
         data: $("#addhuongnghiencuu").serialize(),
         success: function( response ) {
@@ -56,7 +56,7 @@ $('#edithncform').on( 'submit', function(e) {
   e.preventDefault();
   $.ajax({
         type: "POST",
-        url: '/dangky/admin/giaovien/edithnc',
+        url: '/admin/giaovien/edithnc',
         data: $("#edithncform").serialize(),
         success: function( response ) {
             if(response.success == 'true'){
@@ -79,7 +79,7 @@ $('#adddetaiform').on( 'submit', function(e) {
     e.preventDefault(); 
   $.ajax({
         type: "POST",
-        url: '/dangky/admin/giaovien/adddetai',
+        url: '/admin/giaovien/adddetai',
         data: $("#adddetaiform").serialize(),
         success: function( response ) {
         	if(response.success == 'true'){
@@ -102,7 +102,7 @@ $('#editdetaiform').on( 'submit', function(e) {
   e.preventDefault();
   $.ajax({
         type: "POST",
-        url: '/dangky/admin/giaovien/editdetai',
+        url: '/admin/giaovien/editdetai',
         data: $("#editdetaiform").serialize(),
         success: function( response ) {
             if(response.success == 'true'){
@@ -132,7 +132,7 @@ $('.access').on('click',function(){
     });
     $.ajax({
         type: "post",
-        url: '/dangky/admin/giaovien/listyeucau',
+        url: '/admin/giaovien/listyeucau',
         data: { 'value': value.value,'action':value.action},
         success: function(response){
             if(response.success == 'true')
@@ -154,7 +154,7 @@ $('#editdetaisv').on( 'submit', function(e) {
   e.preventDefault();
   $.ajax({
         type: "POST",
-        url: '/dangky/admin/sinhvien/editdetai',
+        url: '/admin/sinhvien/editdetai',
         data: $("#editdetaisv").serialize(),
         success: function( response ) {
             if(response.success == 'true'){

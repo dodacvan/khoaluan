@@ -77,6 +77,10 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
+                            <a href="{!! URL::route('admin.listpost') !!}"><i class="fa fa-star"></i> Thông báo</a>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
                             <a href="{!! URL::route('sinhvien.listlichhen') !!}"><i class="glyphicon glyphicon-bell"></i> Lịch hẹn</a>
                             <!-- /.nav-second-level -->
                         </li>

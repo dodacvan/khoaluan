@@ -33,6 +33,9 @@
                                     $number = 5;
                                     break;
                             }
+                            if($item['hocham'] == 'GS' || $item['hocham'] == 'PGS'){
+                                $number = 6;
+                            }
                         ?>
                         @if($item['show'])
                             <tr class="odd gradeX" align="center" style="background:#84f19a">

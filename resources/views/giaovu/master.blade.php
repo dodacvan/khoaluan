@@ -85,6 +85,18 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        <li>
+                            <a href="#"><i class="fa fa-star"></i> Thông báo<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{!! URL::route('admin.listpost') !!}">Tất cả thông báo</a>
+                                </li>
+                                <li>
+                                    <a href="{!! URL::route('giaovu.getaddpost') !!}">Thêm thông báo</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
                        <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Xuất báo cáo<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -105,7 +117,7 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="{!! URL::route('giaovu.crawlerdata') !!}"><i class="glyphicon glyphicon-time"></i>  Cập nhập thông tin</br> nghiên cứu của giáo viên</a>
+                            <a href="{!! URL::route('giaovu.crawlerdata') !!}"><i class="fa fa-download"></i>  Cập nhập thông tin</br> nghiên cứu của giáo viên</a>
                             <!-- /.nav-second-level -->
                         </li>
                         

@@ -38,10 +38,6 @@ class GiaovienController extends Controller {
 			
 		  if( $validation->fails())
 		  {
-		    // return json_encode([
-		    //         'errors' => $validation->errors()->getMessages(),
-		    //         'success' => 'false'
-		    //      ], 400);
 		    $response = array(
 	            'success' => 'false'
 	        );
@@ -148,12 +144,6 @@ class GiaovienController extends Controller {
 	
 
 	public function getlistyeucau(){
-		// $data = DB::table('detais')->join('giaoviens', function ($join){
-		// 	            $join->on('giaoviens.id', '=', 'detais.giaovien_id')
-		// 	                 ->where('detais.type','=',0);})
-		// 			->join('sinhviens', function ($join){
-		// 	            $join->on('detais.sinhvien_id', '=', 'sinhviens.sinhvien_id');})
-		// 			->select('detais.*','sinhviens.*','sinhviens.id as idsinhvien','detais.ten as tendt')->get();
 		$giaovien_id = $this->getcurrentgiaovien();
 		$messageShow = $this->checkYc();
 		$data =  DB::table('yeucaus')->join('sinhviens','yeucaus.sinhvien_id','=','sinhviens.sinhvien_id')->select('yeucaus.*','sinhviens.*','yeucaus.id as yeucauid')->whereIn('yeucaus.status', [0, 2, 4, 5, 7])->where('yeucaus.giaovien_id','=',$giaovien_id)->get(); 
@@ -173,7 +163,7 @@ class GiaovienController extends Controller {
 		if($sinhvien['nganh'] == "Khoa học máy tính"){
 			if($request->action == 'access'){
 				$message = "";
-				$check = $this->checksosinhvien($sinhvien['nganh'],$giaovien['hocvi'],$giaovien['sosinhvien'],$giaovien['sosinhvienCA'],$message);
+				$check = $this->checksosinhvien($sinhvien['nganh'],$giaovien['hocvi'],$giaovien['hocham'],$giaovien['sosinhvien'],$giaovien['sosinhvienCA'],$message);
 				if($check){
 					switch ($yeucau->status) {
 						case 0:
@@ -254,7 +244,7 @@ class GiaovienController extends Controller {
 		}else{
 			if($request->action == 'access'){
 				$message = "";
-				$check = $this->checksosinhvien($sinhvien['nganh'],$giaovien['hocvi'],$giaovien['sosinhvien'],$giaovien['sosinhvienCA'],$message);
+				$check = $this->checksosinhvien($sinhvien['nganh'],$giaovien['hocvi'],$giaovien['hocham'],$giaovien['sosinhvien'],$giaovien['sosinhvienCA'],$message);
 				if($check){
 					switch ($yeucau->status) {
 						case 0:
@@ -332,7 +322,7 @@ class GiaovienController extends Controller {
 		}
 	}
 
-	public function checksosinhvien($nganh,$value,$sosinhvien,$sosinhvienCA,&$message){
+	public function checksosinhvien($nganh,$value,$hocham,$sosinhvien,$sosinhvienCA,&$message){
 		$numberCA =0;
 		switch ($value) {
             case "":
@@ -342,13 +332,18 @@ class GiaovienController extends Controller {
                 $number = 0;
                 break;
             case "Ths":
-                $number = 3;
+                $number = 4;
                 break;
             default:
             	$numberCA =3;
                 $number = 5;
                 break;
         }
+
+        if($hocham == 'GS' || $hocham == 'PGS'){
+        	$number = 6;
+        }
+
         if($nganh == "Khoa học máy tính"){
 	        if($sosinhvienCA >= $numberCA){
 	        	$message = "Không thể nhận thêm sinh viên CA";
@@ -375,12 +370,15 @@ class GiaovienController extends Controller {
                 $number = 0;
                 break;
             case "Ths":
-                $number = 3;
+                $number = 4;
                 break;
             default:
             	$numberCA =3;
                 $number = 5;
                 break;
+        }
+        if($giaovien->hocham == 'GS' || $giaovien->hocham == 'PGS') {
+        	$number = 6;
         }
         if($numberCA && $giaovien->sosinhvienCA >= $numberCA){
         	$messageShow = "Đã nhận đủ sinh vien CA";
@@ -399,7 +397,6 @@ class GiaovienController extends Controller {
 
 	public function getlistsinhvien(){
 		$giaovien = $this->getcurrentgiaovien();
-		//$data = Sinhvien::where('magiaovien',$giaovien->id)->get()->toArray();
 		$data = DB::table('sinhviens')->join('yeucaus','sinhviens.sinhvien_id','=','yeucaus.sinhvien_id')->select('sinhviens.*','sinhviens.id as svid','yeucaus.tendetai','yeucaus.status')->where('sinhviens.magiaovien',$giaovien)->get();
 		return view('giaovien.listsinhvien',compact('data'));
 	}
